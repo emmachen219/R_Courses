@@ -103,7 +103,7 @@ Huynh, YW (2019) R for Graduate Students.
     -   "*tidyverse*":
         -   This package is actually comprised of multiple packages:
             graphing (*ggplot2*) and user-friendly formatting (*dplyr*).
-    -   "*writexl*": To produce Excel files from my R data.
+    -   "*writexl*": To produce Excel files from R data.
     -   "*readxl*": To load my Excel files into R.
     -   "*utils*": To read or write CSV files
 
@@ -112,7 +112,7 @@ Huynh, YW (2019) R for Graduate Students.
 -   R has all of the basic arithmetic operations available (+, -, /, \*, \^) and can function as a calculator. However, R is also a powerful tool for managing our data.
 -   Frequently used operational symbols:
     -   ==, !=, \>, \>=, \<. \<=
-    -   %in%
+    -   %in% (similar to == but much more useful)
     -   \|, &
 -   Missing Value: NA
 
@@ -136,6 +136,7 @@ Huynh, YW (2019) R for Graduate Students.
 ```
 
 ## Executing code
+-   Note the behavior of logic operations when NA is involved.
 
 ```{r}
 #| echo: true
@@ -148,6 +149,13 @@ TRUE | NA
 
 ## Example 7
 FALSE | NA
+```
+
+## Executing code
+-   Note the behavior of logic operations when NA is involved.
+
+```{r}
+#| echo: true
 
 ## Example 8
 TRUE & NA
@@ -170,13 +178,10 @@ FALSE & NA
 
 ## Example for using <- 
 x <- c(1, 2, 3, 4)
-
 print(x)
 
-## Example for using = 
 y <- c(1, 2, 3, 4, NA)
-
-print(y)
+## Example for using = 
 mean(y, na.rm = FALSE)
 mean(y, na.rm = TRUE)
 ```
@@ -189,7 +194,7 @@ mean(y, na.rm = TRUE)
 -   Most commonly used object type in R: **data frame**
     -   data.frame() is the function to create a new data frame
 
-## Using objects
+## Data frame
 
 ```{r}
 #| echo: true
@@ -230,9 +235,8 @@ df$Height
 
 ## Add another column to df
 df$City = c("Abu Dhabi", "Dubai", "Dubai", "Abu Dhabi", "Al Ain")
-print(df)
-
-df$City = factor(df$City, levels = c("Abu Dhabi", "Dubai", "Al Ain", "Sharjah"))
+df$City_f = factor(df$City, levels = c("Abu Dhabi", "Dubai", "Al Ain", "Sharjah"))
+summary(df)
 ```
 
 
@@ -291,6 +295,20 @@ print(df)
     -   Consistency
 
     -   Avoid Names Already in Use
+    
+## Writing a simple script
+-   A few naming styles
+    -  Snake case (snake_case), e.g., group_mean
+    -  Camel case (camelCase), e.g., groupMean
+    -  Dot-separated (dot.case), e.g., group.mean
+       -  This is not recommended because dot is used in some R functions, e.g. data.frame()
+    -  Uppercase (UPPER_CASE), e.g., GROUP_MEAN
+
+
+## Writing a simple script
+-   My personal style
+    -  I name key objects using Title Snake Case, e.g., Total_Count
+    -  I name temporary objects using snake case, e.g., city_tbl 
 
 ## End of the current lecture
 

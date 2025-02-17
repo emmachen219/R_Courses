@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Emma Wei Chen, Ph.D.&nbsp;  (wei.chen@ku.ac.ae)">
-  <meta name="dcterms.date" content="2025-02-16">
+  <meta name="dcterms.date" content="2025-02-17">
   <title>PUBH732 Weeks 6-9   R Programming</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -402,7 +402,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </div>
 </div>
 
-  <p class="date">2025-02-16</p>
+  <p class="date">2025-02-17</p>
 </section>
 <section>
 <section id="lecture-1-intorduction-to-r" class="title-slide slide level1 center">
@@ -514,7 +514,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <ul>
 <li>This package is actually comprised of multiple packages: graphing (<em>ggplot2</em>) and user-friendly formatting (<em>dplyr</em>).</li>
 </ul></li>
-<li>“<em>writexl</em>”: To produce Excel files from my R data.</li>
+<li>“<em>writexl</em>”: To produce Excel files from R data.</li>
 <li>“<em>readxl</em>”: To load my Excel files into R.</li>
 <li>“<em>utils</em>”: To read or write CSV files</li>
 </ul></li>
@@ -527,7 +527,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <li>Frequently used operational symbols:
 <ul>
 <li>==, !=, &gt;, &gt;=, &lt;. &lt;=</li>
-<li>%in%</li>
+<li>%in% (similar to == but much more useful)</li>
 <li>|, &amp;</li>
 </ul></li>
 <li>Missing Value: NA</li>
@@ -561,6 +561,9 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </section>
 <section id="executing-code-1" class="slide level2">
 <h2>Executing code</h2>
+<ul>
+<li>Note the behavior of logic operations when NA is involved.</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="do">## Example 5</span></span>
 <span id="cb9-2"><a href=""></a><span class="cn">TRUE</span> <span class="sc">|</span> <span class="cn">FALSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -577,6 +580,14 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
+</div>
+</section>
+<section id="executing-code-2" class="slide level2">
+<h2>Executing code</h2>
+<ul>
+<li>Note the behavior of logic operations when NA is involved.</li>
+</ul>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="do">## Example 8</span></span>
 <span id="cb15-2"><a href=""></a><span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -605,23 +616,17 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="do">## Example for using &lt;- </span></span>
 <span id="cb19-2"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
-<span id="cb19-3"><a href=""></a></span>
-<span id="cb19-4"><a href=""></a><span class="fu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href=""></a><span class="fu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="do">## Example for using = </span></span>
-<span id="cb21-2"><a href=""></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="cn">NA</span>)</span>
-<span id="cb21-3"><a href=""></a></span>
-<span id="cb21-4"><a href=""></a><span class="fu">print</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1]  1  2  3  4 NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">mean</span>(y, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="cn">NA</span>)</span>
+<span id="cb21-2"><a href=""></a><span class="do">## Example for using = </span></span>
+<span id="cb21-3"><a href=""></a><span class="fu">mean</span>(y, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">mean</span>(y, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">mean</span>(y, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.5</code></pre>
 </div>
@@ -641,16 +646,16 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </ul></li>
 </ul>
 </section>
-<section id="using-objects-3" class="slide level2">
-<h2>Using objects</h2>
+<section id="data-frame" class="slide level2">
+<h2>Data frame</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="do">## Example for create a data frame</span></span>
-<span id="cb27-2"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb27-3"><a href=""></a>  <span class="at">Height =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">60</span>, <span class="dv">145</span>, <span class="dv">187</span>, <span class="dv">175</span>), </span>
-<span id="cb27-4"><a href=""></a>  <span class="at">Weight =</span> <span class="fu">c</span>(<span class="fl">55.5</span>, <span class="fl">60.2</span>, <span class="fl">62.3</span>, <span class="fl">50.0</span>, <span class="fl">48.1</span>)</span>
-<span id="cb27-5"><a href=""></a>)</span>
-<span id="cb27-6"><a href=""></a></span>
-<span id="cb27-7"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="do">## Example for create a data frame</span></span>
+<span id="cb25-2"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb25-3"><a href=""></a>  <span class="at">Height =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">60</span>, <span class="dv">145</span>, <span class="dv">187</span>, <span class="dv">175</span>), </span>
+<span id="cb25-4"><a href=""></a>  <span class="at">Weight =</span> <span class="fu">c</span>(<span class="fl">55.5</span>, <span class="fl">60.2</span>, <span class="fl">62.3</span>, <span class="fl">50.0</span>, <span class="fl">48.1</span>)</span>
+<span id="cb25-5"><a href=""></a>)</span>
+<span id="cb25-6"><a href=""></a></span>
+<span id="cb25-7"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Height Weight
 1    150   55.5
@@ -661,7 +666,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </div>
 </div>
 </section>
-<section id="data-frame" class="slide level2">
+<section id="data-frame-1" class="slide level2">
 <h2>Data frame</h2>
 <ul>
 <li>Similar as a table.</li>
@@ -671,66 +676,70 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="do">## Example for logical data type</span></span>
-<span id="cb29-2"><a href=""></a>Smoker <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
-<span id="cb29-3"><a href=""></a></span>
-<span id="cb29-4"><a href=""></a><span class="do">## Example for integer data type</span></span>
-<span id="cb29-5"><a href=""></a>ID <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>)</span>
-<span id="cb29-6"><a href=""></a></span>
-<span id="cb29-7"><a href=""></a><span class="do">## Example for numeric data type</span></span>
-<span id="cb29-8"><a href=""></a>df<span class="sc">$</span>Height</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="do">## Example for logical data type</span></span>
+<span id="cb27-2"><a href=""></a>Smoker <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb27-3"><a href=""></a></span>
+<span id="cb27-4"><a href=""></a><span class="do">## Example for integer data type</span></span>
+<span id="cb27-5"><a href=""></a>ID <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>)</span>
+<span id="cb27-6"><a href=""></a></span>
+<span id="cb27-7"><a href=""></a><span class="do">## Example for numeric data type</span></span>
+<span id="cb27-8"><a href=""></a>df<span class="sc">$</span>Height</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 150  60 145 187 175</code></pre>
 </div>
 </div>
 </section>
-<section id="data-frame-1" class="slide level2">
+<section id="data-frame-2" class="slide level2">
 <h2>Data frame</h2>
 <ul>
 <li>Note the difference between character and factor</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="do">## Add another column to df</span></span>
-<span id="cb31-2"><a href=""></a>df<span class="sc">$</span>City <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Dubai"</span>, <span class="st">"Abu Dhabi"</span>, <span class="st">"Al Ain"</span>)</span>
-<span id="cb31-3"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="do">## Add another column to df</span></span>
+<span id="cb29-2"><a href=""></a>df<span class="sc">$</span>City <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Dubai"</span>, <span class="st">"Abu Dhabi"</span>, <span class="st">"Al Ain"</span>)</span>
+<span id="cb29-3"><a href=""></a>df<span class="sc">$</span>City_f <span class="ot">=</span> <span class="fu">factor</span>(df<span class="sc">$</span>City, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Al Ain"</span>, <span class="st">"Sharjah"</span>))</span>
+<span id="cb29-4"><a href=""></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Height Weight      City
-1    150   55.5 Abu Dhabi
-2     60   60.2     Dubai
-3    145   62.3     Dubai
-4    187   50.0 Abu Dhabi
-5    175   48.1    Al Ain</code></pre>
+<pre><code>     Height          Weight          City                 City_f 
+ Min.   : 60.0   Min.   :48.10   Length:5           Abu Dhabi:2  
+ 1st Qu.:145.0   1st Qu.:50.00   Class :character   Dubai    :2  
+ Median :150.0   Median :55.50   Mode  :character   Al Ain   :1  
+ Mean   :143.4   Mean   :55.22                      Sharjah  :0  
+ 3rd Qu.:175.0   3rd Qu.:60.20                                   
+ Max.   :187.0   Max.   :62.30                                   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>df<span class="sc">$</span>City <span class="ot">=</span> <span class="fu">factor</span>(df<span class="sc">$</span>City, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Al Ain"</span>, <span class="st">"Sharjah"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="data-frame-3" class="slide level2">
+<h2>Data frame</h2>
 <ul>
 <li>Each row represents a single observation across all variables.</li>
 <li>Columns have names (variable names), and rows can optionally have names.</li>
 <li>You can access elements using <code>df[row, column]</code> notation.</li>
 </ul>
 </section>
-<section id="data-frame-2" class="slide level2">
+<section id="data-frame-4" class="slide level2">
 <h2>Data frame</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="co"># ## Add another column with less observations</span></span>
-<span id="cb34-2"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M")</span></span>
-<span id="cb34-3"><a href=""></a><span class="co"># </span></span>
-<span id="cb34-4"><a href=""></a><span class="co"># ## Add another column with more observations</span></span>
-<span id="cb34-5"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M", "F", "F", "M")</span></span>
-<span id="cb34-6"><a href=""></a></span>
-<span id="cb34-7"><a href=""></a><span class="do">## Add another column with the same number of observations</span></span>
-<span id="cb34-8"><a href=""></a>df<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>)</span>
-<span id="cb34-9"><a href=""></a></span>
-<span id="cb34-10"><a href=""></a><span class="do">## Add row names</span></span>
-<span id="cb34-11"><a href=""></a><span class="fu">rownames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
-<span id="cb34-12"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># ## Add another column with less observations</span></span>
+<span id="cb31-2"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M")</span></span>
+<span id="cb31-3"><a href=""></a><span class="co"># </span></span>
+<span id="cb31-4"><a href=""></a><span class="co"># ## Add another column with more observations</span></span>
+<span id="cb31-5"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M", "F", "F", "M")</span></span>
+<span id="cb31-6"><a href=""></a></span>
+<span id="cb31-7"><a href=""></a><span class="do">## Add another column with the same number of observations</span></span>
+<span id="cb31-8"><a href=""></a>df<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>)</span>
+<span id="cb31-9"><a href=""></a></span>
+<span id="cb31-10"><a href=""></a><span class="do">## Add row names</span></span>
+<span id="cb31-11"><a href=""></a><span class="fu">rownames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb31-12"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Height Weight      City Gender
-1    150   55.5 Abu Dhabi      F
-2     60   60.2     Dubai      M
-3    145   62.3     Dubai      M
-4    187   50.0 Abu Dhabi      F
-5    175   48.1    Al Ain      F</code></pre>
+<pre><code>  Height Weight      City    City_f Gender
+1    150   55.5 Abu Dhabi Abu Dhabi      F
+2     60   60.2     Dubai     Dubai      M
+3    145   62.3     Dubai     Dubai      M
+4    187   50.0 Abu Dhabi Abu Dhabi      F
+5    175   48.1    Al Ain    Al Ain      F</code></pre>
 </div>
 </div>
 </section>
@@ -765,6 +774,31 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <li><p>No Spaces</p></li>
 <li><p>Consistency</p></li>
 <li><p>Avoid Names Already in Use</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="writing-a-simple-script-1" class="slide level2">
+<h2>Writing a simple script</h2>
+<ul>
+<li>A few naming styles
+<ul>
+<li>Snake case (snake_case), e.g., group_mean</li>
+<li>Camel case (camelCase), e.g., groupMean</li>
+<li>Dot-separated (dot.case), e.g., group.mean
+<ul>
+<li>This is not recommended because dot is used in some R functions, e.g.&nbsp;data.frame()</li>
+</ul></li>
+<li>Uppercase (UPPER_CASE), e.g., GROUP_MEAN</li>
+</ul></li>
+</ul>
+</section>
+<section id="writing-a-simple-script-2" class="slide level2">
+<h2>Writing a simple script</h2>
+<ul>
+<li>My personal style
+<ul>
+<li>I name key objects using Title Snake Case, e.g., Total_Count</li>
+<li>I name temporary objects using snake case, e.g., city_tbl</li>
 </ul></li>
 </ul>
 </section>
