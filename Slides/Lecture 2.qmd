@@ -1,0 +1,143 @@
+---
+title: "PUBH732 Week 6-9 <br> R Programming"
+author: "Emma Wei Chen, Ph.D. <br> (wei.chen@ku.ac.ae)"
+date: "`r Sys.Date()`"
+format: 
+  revealjs:
+    theme: simple
+    footer: "KU-PUBH732-Spring2025-Emma"
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Lecture 2 <br>Data Management Using *tidyverse*
+
+## Outline
+
+### Topics:
+
+-   Basic data management 
+-   Cleaning data and heandling missing values 
+-   Bias in data
+-   Ethical considerations in data collection and analysis
+
+## Outline
+
+### Class Activities:
+
+-   Run data management functions 
+-   Cleaning a dataset by handling missing values and duplicates
+-   Detect bias in data
+
+## *tidyverse*
+
+-   library("tidyverse")
+-   Piping (%\>%)
+    -  What is it?
+    -  Why do you want to use it?
+
+## Without Piping
+```{r}
+#| echo: true
+
+## Example of Not using piping
+
+```
+
+## With Piping
+```{r}
+#| echo: true
+
+## Example of using piping
+
+```
+-   A good coding practice: using separate lines
+
+
+
+## Data Management Functions
+
+-   mutate()
+-   summarize()
+-   group_by() and ungroup()
+
+## Data Management Functions
+
+-   filter()
+-   select()
+-   arrange()
+
+## Data Management Functions
+
+-   count()
+-   rename()
+-   row_number()
+-   ifelse()
+
+
+
+
+
+## Missing values
+
+-   MCAR (Missing Completely at Random): The missingness is independent of any variable (randomly missing).
+-   MAR (Missing at Random): The missingness depends on another observed variable (e.g., income is missing more frequently for younger individuals).
+-   MNAR (Missing Not at Random): The missingness depends on the missing value itself (e.g., people with lower income tend not to report their income).
+
+
+## End of the current lecture
+
+### Any question/feedback?
+
+## Class Activities:
+
+-   Run data management functions 
+-   Cleaning a dataset by handling missing values and duplicates
+-   Detect bias in data
+
+# Lecture 3 <br> Understanding the Nature of Data (Common Distributions: Normal & t-Distributions)
+
+## Outline
+
+### Topics:
+
+Descriptive statistics: Mean, median, variance, standard deviation
+Probability distributions: Normal distribution, t-distribution
+Visualizing distributions using histograms and density plots Central
+Limit Theorem and its implications
+
+## Outline
+
+### Class Activities:
+
+Calculating summary statistics for a dataset Plotting histograms and
+density curves for different datasets Comparing real-world examples of
+normal and t-distributions
+
+# End of the current lecture
+
+## Any question/feedback?
+
+# Lecture 4: Representing Data Using Statistical Tools and Standard Graphs
+
+## Outline
+
+### Topics:
+
+Common statistical tools: Correlation, hypothesis testing basics Data
+visualization: Histograms, boxplots, scatter plots Choosing the right
+graph for different data types Best practices for effective data
+representation
+
+## Outline
+
+### Class Activities:
+
+Creating graphs (histograms, boxplots, scatter plots) using R/Python
+Interpreting visualizations and discussing insights Identifying
+misleading graphs and redesigning them for clarity
+
+# End of the current lecture
+
+## Any question/feedback?

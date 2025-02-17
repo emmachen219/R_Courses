@@ -1,0 +1,4 @@
+.reveal .slides {
+  overflow-y: auto !important;
+  max-height: 200vh; /* Adjust the height as needed */
+}

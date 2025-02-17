@@ -1,0 +1,310 @@
+---
+title: "PUBH732 Weeks 6-9 <br> R Programming"
+author: "Emma Wei Chen, Ph.D. <br> (wei.chen@ku.ac.ae)"
+date: "`r Sys.Date()`"
+format: 
+  revealjs:
+    theme: simple
+    footer: "KU-PUBH732-Spring2025-Emma"
+    slide-number: true
+    auto-stretch: true
+    code-overflow: scroll
+
+---
+
+# Lecture 1 <br> Intorduction to R
+
+## Outline
+
+### Topics:
+
+-   Why use R for data analysis?
+-   Setting up the environment
+-   Basic syntax and functionality of R
+-   Loading datasets
+-   Running simple scripts
+
+## Outline
+
+### Class Activities:
+
+-   Running basic commands in R
+-   Create a data frame
+-   Loading datasets
+-   Writing and executing a small script
+
+## What tools did you use before?
+
+## What tools did you use before?
+
+### List of Other Statistical Tools
+
+-   SPSS
+-   MATLAB
+-   STATA
+
+### Why use R?
+
+-   free of cost;
+-   open access;
+-   a large number of up-to-date packages;
+
+## Textbook
+
+Huynh, YW (2019) R for Graduate Students.
+<https://bookdown.org/yih_huynh/Guide-to-R-Book/>
+
+-   Other Materials
+
+    Batra, Neale, et al. The Epidemiologist R Handbook. 2021.
+    [![DOI](https://zenodo.org/badge/231610102.svg){alt="DOI"}](https://zenodo.org/badge/231610102.svg)
+    <https://www.epirhandbook.com/en/> (Advanced with a focus on
+    epidemiology)
+
+## Setting up the environment
+
+### Components
+
+-   R
+-   RStudio
+
+### Installation
+
+<https://posit.co/download/rstudio-desktop/>
+
+## Setting up the environment
+
+-   Creating a New Project (.Rproj)
+-   Creating a Script (.R)
+-   Layout of RStudio Interface
+    -   Environment
+    -   Script
+    -   Console
+    -   Package
+    -   Working Directory
+
+## Installing and loading packages
+
+-   What are packages?
+    -   A collection of free R tools that an R User wrote.
+    -   Packages are free but must be installed to your computer first. After installation, packages must be loaded into your RStudio library each time RStudio is opened/launched.
+        -   install.packages()
+        -   library()
+        
+## Installing and loading packages
+
+-   Different packages will provide different sets of tools, though some tools may have overlapping functions. In this case, the later loaded function will mask the earlier one.
+    -   e.g. select() is in both *MASS* and *dplyr*. Use dplyr::select() to specify.
+-   How do you know which package/function to use
+
+## Useful packages
+
+-   Useful packages:
+    -   "*tidyverse*":
+        -   This package is actually comprised of multiple packages:
+            graphing (*ggplot2*) and user-friendly formatting (*dplyr*).
+    -   "*writexl*": To produce Excel files from my R data.
+    -   "*readxl*": To load my Excel files into R.
+    -   "*utils*": To read or write CSV files
+
+## Basic syntax
+
+-   R has all of the basic arithmetic operations available (+, -, /, \*, \^) and can function as a calculator. However, R is also a powerful tool for managing our data.
+-   Frequently used operational symbols:
+    -   ==, !=, \>, \>=, \<. \<=
+    -   %in%
+    -   \|, &
+-   Missing Value: NA
+
+## Executing code
+
+```{r}
+#| echo: true
+
+## Example 1
+1 + 2 + 3 + 4
+
+## Example 2
+1 + 2 + 3 + # What happens if only select this line
+  4
+
+## Example 3
+2 %in% c(1, 2, 3, 4)
+
+## Example 4
+1 + 2 + 3 + NA
+```
+
+## Executing code
+
+```{r}
+#| echo: true
+
+## Example 5
+TRUE | FALSE
+
+## Example 6
+TRUE | NA
+
+## Example 7
+FALSE | NA
+
+## Example 8
+TRUE & NA
+
+## Example 9
+FALSE & NA
+```
+
+## Using objects
+
+-   Assigning values to objects (\<-)
+-   What's the difference between \<- and = in R?
+    -   \<- is used for general assignments to object
+    -   = is used for parameters in functions
+
+## Using objects
+
+```{r}
+#| echo: true
+
+## Example for using <- 
+x <- c(1, 2, 3, 4)
+
+print(x)
+
+## Example for using = 
+y <- c(1, 2, 3, 4, NA)
+
+print(y)
+mean(y, na.rm = FALSE)
+mean(y, na.rm = TRUE)
+```
+
+## Using objects
+
+-   Why you want to use objects
+    -   save information in an object so you don't need to type them in again
+    -   to apply functions on the object
+-   Most commonly used object type in R: **data frame**
+    -   data.frame() is the function to create a new data frame
+
+## Using objects
+
+```{r}
+#| echo: true
+
+## Example for create a data frame
+df <- data.frame(
+  Height = c(150, 60, 145, 187, 175), 
+  Weight = c(55.5, 60.2, 62.3, 50.0, 48.1)
+)
+
+print(df)
+```
+
+## Data frame
+
+-   Similar as a table.
+-   Each column can have a different data type
+    -   Commonly used data types: logical, integer, numeric, character,factor
+```{r}
+#| echo: true
+
+## Example for logical data type
+Smoker <- c(TRUE, FALSE, TRUE, FALSE, FALSE)
+
+## Example for integer data type
+ID <- c(1, 2, 3, 4, 5, 6, 7, 8)
+
+## Example for numeric data type
+df$Height
+
+```
+
+## Data frame
+
+-   Note the difference between character and factor
+```{r}
+#| echo: true
+
+## Add another column to df
+df$City = c("Abu Dhabi", "Dubai", "Dubai", "Abu Dhabi", "Al Ain")
+print(df)
+
+df$City = factor(df$City, levels = c("Abu Dhabi", "Dubai", "Al Ain", "Sharjah"))
+```
+
+
+## Data frame
+
+-   Each row represents a single observation across all variables.
+-   Columns have names (variable names), and rows can optionally have names.
+-   You can access elements using `df[row, column]` notation.
+
+
+## Data frame
+
+```{r}
+#| echo: true
+
+# ## Add another column with less observations
+# df$Gender = c("F", "M", "M")
+# 
+# ## Add another column with more observations
+# df$Gender = c("F", "M", "M", "F", "F", "M")
+
+## Add another column with the same number of observations
+df$Gender = c("F", "M", "M", "F", "F")
+
+## Add row names
+rownames(df) <- c(1, 2, 3, 4, 5)
+print(df)
+
+```
+
+## Datasets
+
+-   Build-in Datasets
+    -   data()
+-   Datasets from R Packages. Below are PH&E related packages offers practice datasets:
+    -   *pubh*
+        [link](https://www.rdocumentation.org/packages/pubh/versions/2.0.0)
+    -   *epi*
+        [link](https://www.rdocumentation.org/packages/Epi/versions/2.59)
+-   External data files
+    -   read_xlsx() from *readxl* package
+    -   read.csv() from *utils* package
+
+## Writing a simple script
+
+-   Header and Comment Organization
+-   Naming (Note: R is case-sensitive!)
+    -   Choose Descriptive and Concise Names
+
+    -   Do Not Start with a Number or Symbol
+
+    -   Avoid using punctuation other than a period (.), dash (-), or underscore (\_)
+
+    -   No Spaces
+
+    -   Consistency
+
+    -   Avoid Names Already in Use
+
+## End of the current lecture
+
+### Any questions/feedback?
+
+## Class activities:
+
+-   Practice basic commands in R
+-   Create a data frame that include at least 3 different types of data: logical, integer, factor
+    -   apply function summary() for your data frame to see what happens
+-   Loading datasets
+    -   try different ways to load datasets
+-   Writing and executing a small script
+    -   source()
+
+## Before Next Class
+-   Read "II Tidyverse" on the [R for Graduate Students](https://bookdown.org/yih_huynh/Guide-to-R-Book)
