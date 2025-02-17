@@ -308,7 +308,7 @@ print(df)
 ## Writing a simple script
 -   My personal style
     -  I name key objects using Title Snake Case, e.g., Total_Count
-    -  I name temporary objects using snake case, e.g., city_tbl 
+    -  I name temporary objects using snake case, e.g., city_tbl
 
 ## End of the current lecture
 
