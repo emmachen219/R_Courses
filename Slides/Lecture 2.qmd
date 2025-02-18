@@ -38,22 +38,33 @@ editor:
     -  Why do you want to use it?
 
 ## Without Piping
+Example: using mtcars dataset, The example filters cars with mpg > 20, groups them by cyl, and calculates the average hp for each group
 ```{r}
 #| echo: true
 
 ## Example of Not using piping
-
+filtered_summary <- summarise(group_by(filter(mtcars, mpg > 20), cyl), avg_hp = mean(hp, na.rm = TRUE))
 ```
 
 ## With Piping
 ```{r}
 #| echo: true
 
-## Example of using piping
+## Example 1 of using piping
+filtered_summary <- mtcars %>%
+  filter(mpg > 20) %>%
+  group_by(cyl) %>%
+  summarise(avg_hp = mean(hp, na.rm = TRUE))
+
+## Example 2 of using piping
+filtered_summary <- mtcars %>% filter(mpg > 20) %>% group_by(cyl) %>% summarise(avg_hp = mean(hp, na.rm = TRUE))
 
 ```
--   A good coding practice: using separate lines
-
+## A good coding practice: using separate lines
+-  Improved Readability
+-  Simplifies Code Reviews
+-  Easier Debugging
+-  Enhances Maintainability
 
 
 ## Data Management Functions
@@ -74,9 +85,6 @@ editor:
 -   rename()
 -   row_number()
 -   ifelse()
-
-
-
 
 
 ## Missing values
@@ -138,6 +146,12 @@ Creating graphs (histograms, boxplots, scatter plots) using R/Python
 Interpreting visualizations and discussing insights Identifying
 misleading graphs and redesigning them for clarity
 
-# End of the current lecture
+
+## Notes
+Correlation results
+
+
+
+## End of the current lecture
 
 ## Any question/feedback?
