@@ -217,10 +217,10 @@ print(df)
 #| echo: true
 
 ## Example for logical data type
-Smoker <- c(TRUE, FALSE, TRUE, FALSE, FALSE)
+df$Smoker <- c(TRUE, FALSE, TRUE, FALSE, FALSE)
 
 ## Example for integer data type
-ID <- c(1, 2, 3, 4, 5, 6, 7, 8)
+df$ID <- c(1, 2, 3, 4, 5)
 
 ## Example for numeric data type
 df$Height
@@ -274,7 +274,7 @@ print(df)
 -   Datasets from R Packages. Below are PH&E related packages offers practice datasets:
     -   *pubh*
         [link](https://www.rdocumentation.org/packages/pubh/versions/2.0.0)
-    -   *epi*
+    -   *Epi*
         [link](https://www.rdocumentation.org/packages/Epi/versions/2.59)
 -   External data files
     -   read_xlsx() from *readxl* package
@@ -317,7 +317,8 @@ print(df)
 ## Class activities:
 
 -   Practice basic commands in R
--   Create a data frame that include at least 3 different types of data: logical, integer, factor
+-   Create a data frame that include at least 5 different types of data: logical, integer, numeric, character, factor
+    -   do operation on one column to create another column
     -   apply function summary() for your data frame to see what happens
 -   Loading datasets
     -   try different ways to load datasets
