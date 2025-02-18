@@ -234,8 +234,8 @@ df$Height
 #| echo: true
 
 ## Add another column to df
-df$City = c("Abu Dhabi", "Dubai", "Dubai", "Abu Dhabi", "Al Ain")
-df$City_f = factor(df$City, levels = c("Abu Dhabi", "Dubai", "Al Ain", "Sharjah"))
+df$City <- c("Abu Dhabi", "Dubai", "Dubai", "Abu Dhabi", "Al Ain")
+df$City_f <- factor(df$City, levels = c("Abu Dhabi", "Dubai", "Al Ain", "Sharjah"))
 summary(df)
 ```
 
@@ -253,13 +253,13 @@ summary(df)
 #| echo: true
 
 # ## Add another column with less observations
-# df$Gender = c("F", "M", "M")
+# df$Gender <- c("F", "M", "M")
 # 
 # ## Add another column with more observations
-# df$Gender = c("F", "M", "M", "F", "F", "M")
+# df$Gender <- c("F", "M", "M", "F", "F", "M")
 
 ## Add another column with the same number of observations
-df$Gender = c("F", "M", "M", "F", "F")
+df$Gender <- c("F", "M", "M", "F", "F")
 
 ## Add row names
 rownames(df) <- c(1, 2, 3, 4, 5)
@@ -322,8 +322,7 @@ print(df)
     -   apply function summary() for your data frame to see what happens
 -   Loading datasets
     -   try different ways to load datasets
--   Writing and executing a small script
-    -   source()
+-   Writing and executing a small script using source()
 
 ## Before Next Class
 -   Read "II Tidyverse" on the [R for Graduate Students](https://bookdown.org/yih_huynh/Guide-to-R-Book)

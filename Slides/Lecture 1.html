@@ -696,8 +696,8 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="do">## Add another column to df</span></span>
-<span id="cb29-2"><a href=""></a>df<span class="sc">$</span>City <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Dubai"</span>, <span class="st">"Abu Dhabi"</span>, <span class="st">"Al Ain"</span>)</span>
-<span id="cb29-3"><a href=""></a>df<span class="sc">$</span>City_f <span class="ot">=</span> <span class="fu">factor</span>(df<span class="sc">$</span>City, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Al Ain"</span>, <span class="st">"Sharjah"</span>))</span>
+<span id="cb29-2"><a href=""></a>df<span class="sc">$</span>City <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Dubai"</span>, <span class="st">"Abu Dhabi"</span>, <span class="st">"Al Ain"</span>)</span>
+<span id="cb29-3"><a href=""></a>df<span class="sc">$</span>City_f <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>City, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Abu Dhabi"</span>, <span class="st">"Dubai"</span>, <span class="st">"Al Ain"</span>, <span class="st">"Sharjah"</span>))</span>
 <span id="cb29-4"><a href=""></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Height          Weight        Smoker              ID        City          
@@ -729,13 +729,13 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <h2>Data frame</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># ## Add another column with less observations</span></span>
-<span id="cb31-2"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M")</span></span>
+<span id="cb31-2"><a href=""></a><span class="co"># df$Gender &lt;- c("F", "M", "M")</span></span>
 <span id="cb31-3"><a href=""></a><span class="co"># </span></span>
 <span id="cb31-4"><a href=""></a><span class="co"># ## Add another column with more observations</span></span>
-<span id="cb31-5"><a href=""></a><span class="co"># df$Gender = c("F", "M", "M", "F", "F", "M")</span></span>
+<span id="cb31-5"><a href=""></a><span class="co"># df$Gender &lt;- c("F", "M", "M", "F", "F", "M")</span></span>
 <span id="cb31-6"><a href=""></a></span>
 <span id="cb31-7"><a href=""></a><span class="do">## Add another column with the same number of observations</span></span>
-<span id="cb31-8"><a href=""></a>df<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>)</span>
+<span id="cb31-8"><a href=""></a>df<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>)</span>
 <span id="cb31-9"><a href=""></a></span>
 <span id="cb31-10"><a href=""></a><span class="do">## Add row names</span></span>
 <span id="cb31-11"><a href=""></a><span class="fu">rownames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
@@ -826,10 +826,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <ul>
 <li>try different ways to load datasets</li>
 </ul></li>
-<li>Writing and executing a small script
-<ul>
-<li>source()</li>
-</ul></li>
+<li>Writing and executing a small script using source()</li>
 </ul>
 </section>
 <section id="before-next-class" class="slide level2">
