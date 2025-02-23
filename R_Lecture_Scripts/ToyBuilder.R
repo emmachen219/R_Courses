@@ -29,20 +29,28 @@ Toy_Data_1 <- Macmahon %>%
     Weight = rnorm(13465, mean = 60, sd = 5)
   )
 
-write.csv(Toy_Data_1, "../ToyData/Toy_Data_1.csv")
-
-##### Toy Data 2
-
-Toy_Data_2 <- read_xlsx("../ToyData/Toy_Data_2.xlsx")
-
+write.csv(Toy_Data_1, "./ToyData/Toy_Data_1.csv")
 
 ##### Toy Data 3: Messy Data
+Messy_Data <- data.frame(
+  ID = c(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 110),  # Duplicate ID
+  Name = c("Alice", "Bob", "Charlie", "David", "Eve", "Frank", "George", "Hannah", NA, "Jack", "Jack"),  # Missing value
+  Age = c(25, 30, "Thirty-Five", 40, NA, 29, 33, "twenty", 27, 32, 32),  # Inconsistent formatting
+  Gender = c("F", "M", "Male", "M", "F", "Female", "M", "F", "F", "M", "M"),  # Inconsistent gender labels
+  Income = c("55000", "62k", "65000", "72,000", "NA", "58K", "NA", "61000", "59000", "75000", "75000"),  # Character type with missing values
+  Date_of_Birth = c("1998-05-21", "1993/08/14", "01-12-1985", "1980-07-30", "1985/06/12", 
+                    "1994-02-20", "1991/10/25", "1999-03-08", "1987-09-10", "1992-11-11", "1992-11-11"),  # Inconsistent date formats
+  City = c("New York", "Los Angeles", "Chicago", "New York", "Houston", "Chicago", "Miami", "Los Angeles", "NA", "Houston", "Houston"),  # Missing value and duplication
+  Extra_Column = c("Remove", "Remove", "Remove", "Remove", "Remove", "Remove", "Remove", "Remove", "Remove", "Remove", "Remove")  # Irrelevant column
+)
+
+save(Messy_Data, file = "./ToyData/Toy_Data_2.RData")
 
 
-##### Toy Data 4: Missing Values
+##### Toy Data 2: Missing Values
 
 # Create a complete dataset
-data_complete <- tibble(
+Complete_Data <- tibble(
   ID = 1:100,
   Age = sample(20:60, 100, replace = TRUE),
   Income = sample(30000:90000, 100, replace = TRUE),
@@ -51,7 +59,7 @@ data_complete <- tibble(
 )
 
 # Introduce missing values
-data_missing <- data_complete %>%
+Missing_Data <- Complete_Data %>%
   mutate(
     # MCAR: Randomly drop some values in the 'Health_Score' column
     Health_Score = ifelse(runif(n()) < 0.2, NA, Health_Score),
@@ -63,4 +71,10 @@ data_missing <- data_complete %>%
     Depression_Score = ifelse(Depression_Score > 7 & runif(n()) < 0.6, NA, Depression_Score)
   )
 
-write.csv(data_missing, "../ToyData/Toy_Data_4.csv")
+write.csv(Missing_Data, "./ToyData/Toy_Data_3.csv")
+
+##### Toy Data 4: linelist_raw.xlsx
+
+Toy_Data_4 <- read_xlsx("./ToyData/linelist_raw.xlsx")
+write.csv(Toy_Data_4, "./ToyData/Toy_Data_4.csv")
+

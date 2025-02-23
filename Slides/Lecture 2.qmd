@@ -1,14 +1,14 @@
 ---
-title: "PUBH732 Week 6-9 <br> R Programming"
+title: "PUBH732 Weeks 6-9 <br> R Programming"
 author: "Emma Wei Chen, Ph.D. <br> (wei.chen@ku.ac.ae)"
 date: "`r Sys.Date()`"
 format: 
   revealjs:
     theme: simple
     footer: "KU-PUBH732-Spring2025-Emma"
-editor: 
-  markdown: 
-    wrap: 72
+    slide-number: true
+    auto-stretch: true
+    code-overflow: scroll
 ---
 
 # Lecture 2 <br>Data Management Using *tidyverse*
@@ -18,7 +18,7 @@ editor:
 ### Topics:
 
 -   Basic data management 
--   Cleaning data and heandling missing values 
+-   Cleaning data and handling missing values 
 -   Bias in data
 -   Ethical considerations in data collection and analysis
 
@@ -26,9 +26,10 @@ editor:
 
 ### Class Activities:
 
--   Run data management functions 
+-   Run Data management functions 
 -   Cleaning a dataset by handling missing values and duplicates
 -   Detect bias in data
+
 
 ## *tidyverse*
 
@@ -37,29 +38,35 @@ editor:
     -  What is it?
     -  Why do you want to use it?
 
-## Without Piping
-Example: using mtcars dataset, The example filters cars with mpg > 20, groups them by cyl, and calculates the average hp for each group
+## Piping or No-piping
+Example: using *mtcars* dataset. The example filters cars with mpg (Miles/(US) gallon) > 20, groups them by cyl (Number of cylinders), and calculates the average hp (Gross horsepower) for each group
+
 ```{r}
 #| echo: true
+library("tidyverse")
 
-## Example of Not using piping
-filtered_summary <- summarise(group_by(filter(mtcars, mpg > 20), cyl), avg_hp = mean(hp, na.rm = TRUE))
+data("mtcars")
+head(mtcars, n=3)
+
 ```
 
-## With Piping
+## Piping or No-piping
+
 ```{r}
 #| echo: true
+## Example of Not using piping
+filtered_summary <- summarize(group_by(filter(mtcars, mpg > 20), cyl), avg_hp = mean(hp, na.rm = TRUE))
 
 ## Example 1 of using piping
+filtered_summary <- mtcars %>% filter(mpg > 20) %>% group_by(cyl) %>% summarize(avg_hp = mean(hp, na.rm = TRUE))
+
+## Example 2 of using piping
 filtered_summary <- mtcars %>%
   filter(mpg > 20) %>%
   group_by(cyl) %>%
-  summarise(avg_hp = mean(hp, na.rm = TRUE))
-
-## Example 2 of using piping
-filtered_summary <- mtcars %>% filter(mpg > 20) %>% group_by(cyl) %>% summarise(avg_hp = mean(hp, na.rm = TRUE))
-
+  summarize(avg_hp = mean(hp, na.rm = TRUE))
 ```
+
 ## A good coding practice: using separate lines
 -  Improved Readability
 -  Simplifies Code Reviews
@@ -67,91 +74,326 @@ filtered_summary <- mtcars %>% filter(mpg > 20) %>% group_by(cyl) %>% summarise(
 -  Enhances Maintainability
 
 
-## Data Management Functions
+## Data management functions
+-   **mutate()**: Adds new variables or modifies existing ones in a dataframe by applying transformations.
+-   **summarize()**: Computes summary statistics (e.g., mean, count) for a dataset, often used with group_by().
+-   **group_by()**: Groups data by one or more variables, enabling grouped operations such as summaries or transformations.
+-   **ungroup()**: Removes grouping structure from a dataframe, returning it to an ungrouped state.
 
--   mutate()
--   summarize()
--   group_by() and ungroup()
+## Data management functions
+```{r}
+#| echo: true
 
-## Data Management Functions
+Toy_Data_1 <- read.csv("../ToyData/Toy_Data_1.csv")
+Toy_Data_1 %>%
+  mutate(
+    Age_Childbirth = as.factor(Age_Childbirth)
+  ) %>%
+  group_by(Age_Childbirth) %>%
+  summarize(mean_drink = mean(Drink_Per_Week)) %>%
+  ungroup()
+```
+## Data management functions
+```{r}
+#| echo: true
+summary(Toy_Data_1)
+```
+-  Why is Toy_Data_1$Age_Childbirth still character type?
 
--   filter()
--   select()
--   arrange()
+## Data management functions
+```{r}
+#| echo: true
 
-## Data Management Functions
+Toy_Data_1 <- read.csv("../ToyData/Toy_Data_1.csv")
 
--   count()
--   rename()
--   row_number()
--   ifelse()
+Toy_Data_1 <- Toy_Data_1 %>%
+  mutate(
+    Age_Childbirth = as.factor(Age_Childbirth)
+  ) 
+Toy_Data_1 %>%
+  group_by(Age_Childbirth) %>%
+  summarize(mean_drink = mean(Drink_Per_Week)) %>%
+  ungroup()
+
+```
+
+## Data management functions
+```{r}
+#| echo: true
+summary(Toy_Data_1)
+```
+
+## Data management functions
+-   **filter()**: Subsets rows in a dataframe based on conditions.
+-   **select()**: Chooses specific columns from a dataframe.
+-   **arrange()**: Orders rows based on one or more columns (e.g., arrange(salary) sorts by salary in ascending order; use desc(salary) for descending order).
+
+## Data management functions
+```{r}
+#| echo: true
+
+# Choose a subset of data
+No_Drink_Data <- Toy_Data_1 %>%
+  filter(Drink_Per_Week %in% c(0)) %>%
+  select(BRCA, Breast_Cancer)
+
+# Order rows based on Age
+Toy_Data_1 <- Toy_Data_1 %>%
+  arrange(Age_Childbirth) 
+
+```
+
+## Data management functions
+-   **count()**
+-   **rename()**
+-   **ifelse()**
+
+## Data management functions
+```{r}
+#| echo: true
+
+# Example for count()
+Toy_Data_1 %>% group_by(Age_Childbirth) %>% count()
+```
+## Data management functions
+```{r}
+#| echo: true
+
+# Example for rename()
+Toy_Data_1 <- Toy_Data_1 %>% rename(ID = X)
+head(Toy_Data_1, n=3)
+
+```
+
+## Data management functions
+```{r}
+#| echo: true
+
+# Example for ifelse()
+Toy_Data_1 <- Toy_Data_1 %>%
+  mutate(
+    Breast_Cancer = ifelse(Breast_Cancer == "Yes", TRUE, FALSE)
+  )
+summary(Toy_Data_1)
+```
+
+## Messy data
+-   Real-world data could be messy.
+    -   Data format inconsistency
+    -   Include extra or redundant information
+-   What information are you interested?
+    -   Check the columns/rows that you are interested
+    -   Created a data frame containing only these information
+-   Check duplicates: **get_dupes()** from *janitor* package
+-   Check data format consistency across different observations
+
+## Messy data example
+Example using Toy_Data_2.csv.  
+```{r}
+#| echo: true
+load("../ToyData/Toy_Data_2.RData") # Messy_Data
+summary(Messy_Data)
+```
+
+## Messy data example
+I'm interested in Income level, City, Gender. and It's always good to keep ID (or any case identification column)
+```{r}
+#| echo: true
+My_Data <- Messy_Data %>%
+  select(ID, Gender, Income, City)
+head(My_Data, n = 2)
+
+# The same output
+My_Data_2 <- Messy_Data %>%
+  select(-c(Name, Age, Date_of_Birth, Extra_Column))
+head(My_Data_2, n = 2)
+
+
+```
+
+## Messy data example
+Check duplicates 
+```{r}
+#| echo: true
+library("janitor")
+
+dupes <- My_Data %>% get_dupes()
+print(dupes)
+
+My_Data <- My_Data %>% distinct()
+```
+
+## Messy data example
+Check data format consistency and make adjustments 
+```{r}
+#| echo: true
+print(My_Data)
+
+```
+## Messy data example
+We detected inconsistency among Gender and Income. 
+```{r}
+#| echo: true
+# Clean Gender
+My_Data <- My_Data %>% 
+  mutate(
+    Gender = gsub("emale", "", Gender),
+    Gender = gsub("ale", "", Gender)
+  ) 
+
+# Clean Income
+My_Data <- My_Data %>% 
+  mutate(
+    Income = gsub("k", "000", Income),
+    Income = gsub("K", "000", Income),
+    Income = gsub(",", "", Income)
+  ) %>%
+  mutate(
+    Income = as.numeric(Income)
+  )
+
+```
+## Messy data example
+Check data format consistency and make adjustments 
+```{r}
+#| echo: true
+print(My_Data)
+
+```
 
 
 ## Missing values
+-   Types of missing values
+    -   MCAR (Missing Completely at Random): The missingness is independent of any variable (randomly missing).
+    -   MAR (Missing at Random): The missingness depends on another observed variable (e.g., income is missing more frequently for younger individuals).
+    -   MNAR (Missing Not at Random): The missingness depends on the missing value itself (e.g., people with lower income tend not to report their income).
 
--   MCAR (Missing Completely at Random): The missingness is independent of any variable (randomly missing).
--   MAR (Missing at Random): The missingness depends on another observed variable (e.g., income is missing more frequently for younger individuals).
--   MNAR (Missing Not at Random): The missingness depends on the missing value itself (e.g., people with lower income tend not to report their income).
+## Missing values
+-   Why do we care about missing values
+    -   Knowing the type of missingness helps you decide whether imputation is necessary or if the dataset is still reliable.
+    -   Choosing the Right Handling Method: e.g., mean imputation for MCAR.
+    -   Informing Data Collection Improvements: e.g., for MAR and MNAR.
+    -   Improving Model Performance
 
+## Ploting missing values
+-   *naniar* package
+```{r}
+#| echo: true
 
+library("naniar")
+Data_Missing <- read.csv("../ToyData/Toy_Data_3.csv")
+head(Data_Missing, n = 3)
+colSums(is.na(Data_Missing))
+```
+## Ploting missing values
+```{r}
+#| echo: true
+Data_Missing <- Data_Missing %>%
+  select(-X) %>%
+  mutate(
+    Age_Group = cut(Age, 
+                  breaks = c(20, 30, 40, 50, 100), 
+                  labels = c("20-29", "30-39", "40-49","50+"), 
+                  right = FALSE)
+  )
+Data_Missing %>% gg_miss_var(show_pct = TRUE, facet = Age_Group)
+
+```
+## Ploting missing values
+```{r}
+#| echo: true
+
+Data_Missing %>% 
+  arrange(Age) %>%
+  vis_miss()
+
+```
+
+-  From this plot we could more clearly observe young people are more likely missing income. 
+
+## Handling missing values
+```{r}
+#| echo: true
+
+Data_Missing %>% 
+  arrange(Income) %>%
+  vis_miss()
+
+```
+## Handling missing values
+```{r}
+#| echo: true
+
+Data_Missing %>% 
+  arrange(Health_Score) %>%
+  vis_miss()
+
+```
+
+## Handling missing values
+```{r}
+#| echo: true
+
+Data_Missing %>% 
+  arrange(Depression_Score) %>%
+  vis_miss()
+
+```
+## Handling missing values
+-  Keep them, and apply na.rm() whenever necessary
+-  Row-wise deletion
+```{r}
+#| echo: true
+   Data_Clean <- na.omit(Data_Missing)
+```
+-  Fill missing values (Imputation)
+   - Replace with Mean/Median (for numeric data)
+   - Replace with Mode (for categorical data)
+   - Use Predictive Imputation (e.g., kNN, Regression)
+-  Run other versions of analysis with different treatments on missing values to support your main results
+
+## Bias in data
+-  Sampling Bias
+   -  e.g., Conducting a health survey using only data from urban hospitals, ignoring rural populations.
+-  Selection Bias
+   -  e.g., Only analyzing patients who completed treatment while ignoring those who dropped out.
+-  Measurement Bias
+   -  e.g., Self-reported income or mental health data may be biased due to social desirability.
+
+## Ethical considerations
+-  Informed Consent
+-  Privacy and Confidentiality
+   -  Data must be anonymized or de-identified to protect individuals.
+-  Transparency and Reproducibility
+   -  Methods used to collect and analyze data should be clear and replicable.
+   -  Learning R is contributing to this point directly!
+
+## Ethical considerations
+-  Avoiding Misuse of Data
+   -  Data should not be used in a way that could harm individuals or communities.
+-  Fair Representation
+   -  Data should reflect diverse populations and not reinforce existing inequalities.
+-  Addressing Missing Data Ethically
+   -  Decisions about missing data (imputation, removal) should not introduce bias.
+   
 ## End of the current lecture
 
 ### Any question/feedback?
 
 ## Class Activities:
 
--   Run data management functions 
+-   Run Data management functions 
+    -  Toy_Data_1
+         -   Convert SES to be a factor variable
+         -   Create a new column BMI, which is calculated based on Height and Weight
+    -  Toy_Data_2
+         -   Build a clean subset of data that includes Income, Gender and Age
+         -   Sort the data based on Gender and Age 
+
+## Class Activities:
 -   Cleaning a dataset by handling missing values and duplicates
--   Detect bias in data
+    -  Toy_Data_3
+         -   Replace missing values in Health Score with median value
+         -   Calculate mean Health Score for each age group (20-29 30-39 40-49 etc)
+-   Detect bias in Toy_Data_1
 
-# Lecture 3 <br> Understanding the Nature of Data (Common Distributions: Normal & t-Distributions)
-
-## Outline
-
-### Topics:
-
-Descriptive statistics: Mean, median, variance, standard deviation
-Probability distributions: Normal distribution, t-distribution
-Visualizing distributions using histograms and density plots Central
-Limit Theorem and its implications
-
-## Outline
-
-### Class Activities:
-
-Calculating summary statistics for a dataset Plotting histograms and
-density curves for different datasets Comparing real-world examples of
-normal and t-distributions
-
-# End of the current lecture
-
-## Any question/feedback?
-
-# Lecture 4: Representing Data Using Statistical Tools and Standard Graphs
-
-## Outline
-
-### Topics:
-
-Common statistical tools: Correlation, hypothesis testing basics Data
-visualization: Histograms, boxplots, scatter plots Choosing the right
-graph for different data types Best practices for effective data
-representation
-
-## Outline
-
-### Class Activities:
-
-Creating graphs (histograms, boxplots, scatter plots) using R/Python
-Interpreting visualizations and discussing insights Identifying
-misleading graphs and redesigning them for clarity
-
-
-## Notes
-Correlation results
-
-
-
-## End of the current lecture
-
-## Any question/feedback?

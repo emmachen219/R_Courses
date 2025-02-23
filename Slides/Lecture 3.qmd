@@ -1,0 +1,57 @@
+---
+title: "Lecture 3"
+author: "Emma Wei Chen"
+format: revealjs
+---
+
+# Lecture 3 <br> Understanding the Nature of Data (Common Distributions: Normal & t-Distributions)
+
+## Outline
+
+### Topics:
+
+Descriptive statistics: Mean, median, variance, standard deviation
+Probability distributions: Normal distribution, t-distribution
+Visualizing distributions using histograms and density plots Central
+Limit Theorem and its implications
+
+## Outline
+
+### Class Activities:
+
+Calculating summary statistics for a dataset Plotting histograms and
+density curves for different datasets Comparing real-world examples of
+normal and t-distributions
+
+# End of the current lecture
+
+## Any question/feedback?
+
+# Lecture 4: Representing Data Using Statistical Tools and Standard Graphs
+
+## Outline
+
+### Topics:
+
+Common statistical tools: Correlation, hypothesis testing basics Data
+visualization: Histograms, boxplots, scatter plots Choosing the right
+graph for different data types Best practices for effective data
+representation
+
+## Outline
+
+### Class Activities:
+
+Creating graphs (histograms, boxplots, scatter plots) using R/Python
+Interpreting visualizations and discussing insights Identifying
+misleading graphs and redesigning them for clarity
+
+
+## Notes
+Correlation results
+
+
+
+## End of the current lecture
+
+## Any question/feedback?
