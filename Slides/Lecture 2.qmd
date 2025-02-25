@@ -188,7 +188,7 @@ summary(Toy_Data_1)
 -   Check data format consistency across different observations
 
 ## Messy data example
-Example using Toy_Data_2.csv.  
+Example using Toy_Data_2.RData.  
 ```{r}
 #| echo: true
 load("../ToyData/Toy_Data_2.RData") # Messy_Data
