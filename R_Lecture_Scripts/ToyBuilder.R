@@ -47,7 +47,7 @@ Messy_Data <- data.frame(
 save(Messy_Data, file = "./ToyData/Toy_Data_2.RData")
 
 
-##### Toy Data 2: Missing Values
+##### Toy Data 3: Missing Values
 
 # Create a complete dataset
 Complete_Data <- tibble(
@@ -73,8 +73,53 @@ Missing_Data <- Complete_Data %>%
 
 write.csv(Missing_Data, "./ToyData/Toy_Data_3.csv")
 
-##### Toy Data 4: linelist_raw.xlsx
-
+##### Toy Data 4
 Toy_Data_4 <- read_xlsx("./ToyData/linelist_raw.xlsx")
 write.csv(Toy_Data_4, "./ToyData/Toy_Data_4.csv")
+
+
+##### Toy Data 5
+# Sample size
+n <- 2000
+
+# Generate gender variable (Binary: Male/Female)
+gender <- sample(c("Male", "Female"), n, replace = TRUE, prob = c(0.4, 0.6))  
+
+# Age distribution (normal with some variation)
+age <- round(rnorm(n, mean = 35, sd = 10))  
+age[age < 18] <- 18  # Ensuring minimum age is 18
+
+# Socioeconomic status (SES): Low, Medium, High (with gender bias)
+SES <- ifelse(gender == "Male",  
+              sample(c("Low", "Medium", "High"), n, replace = TRUE, prob = c(0.2, 0.5, 0.3)),
+              sample(c("Low", "Medium", "High"), n, replace = TRUE, prob = c(0.4, 0.5, 0.1)))  
+
+# Income: Higher for males on average
+income <- ifelse(SES == "Low", rnorm(n, mean = 2000, sd = 500),
+                 ifelse(SES == "Medium", rnorm(n, mean = 4000, sd = 1000), 
+                        rnorm(n, mean = 7000, sd = 1500)))
+income <- ifelse(gender == "Female", income * 0.85, income)  # Gender pay gap  
+
+# Depression status (1 = Depressed, 0 = Not Depressed)
+depression <- ifelse(gender == "Female", 
+                     sample(c(1, 0), n, replace = TRUE, prob = c(0.5, 0.5)), 
+                     sample(c(1, 0), n, replace = TRUE, prob = c(0.3, 0.7)))  
+
+# Treatment received (1 = Yes, 0 = No, biased by gender & SES)
+treatment <- ifelse(depression == 1,
+                    ifelse(gender == "Male",
+                           sample(c(1, 0), n, replace = TRUE, prob = c(0.7, 0.3)), 
+                           sample(c(1, 0), n, replace = TRUE, prob = c(0.5, 0.5))),
+                    NA)  # NA for non-depressed individuals
+
+# Introduce some missing values
+income[sample(1:n, 50)] <- NA  
+depression[sample(1:n, 50)] <- NA
+treatment[sample(1:n, 20)] <- NA  
+
+# Combine into dataframe
+Toy_Data_5 <- data.frame(Gender = gender, Age = age, SES = SES, Income = income, 
+                       Depression = depression, Treatment = treatment)
+
+write.csv(Toy_Data_5, "./ToyData/Toy_Data_5.csv")
 

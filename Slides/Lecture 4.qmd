@@ -1,0 +1,45 @@
+---
+title: "PUBH732 Weeks 6-9 <br> R Programming"
+author: "Emma Wei Chen, Ph.D. <br> (wei.chen@ku.ac.ae)"
+date: "`r Sys.Date()`"
+format: 
+  revealjs:
+    theme: simple
+    footer: "KU-PUBH732-Spring2025-Emma"
+    slide-number: true
+    auto-stretch: true
+    code-overflow: scroll
+---
+
+# Lecture 4 <br> Understanding the Nature of Data and Basic Statistical Graphs Part 2
+
+
+# Lecture 4: Statistical Tools and Simple Data Visualization
+
+## Outline
+
+### Topics:
+
+-  Hypothesis testing and p-values
+-  χ2-tests
+-  Confidence intervals
+-  Comparing mean values
+-  Correlations
+
+## Outline
+
+### Class Activities:
+
+Creating graphs (histograms, boxplots, scatter plots) using R/Python
+Interpreting visualizations and discussing insights Identifying
+misleading graphs and redesigning them for clarity
+
+
+## Notes
+Correlation results
+
+
+
+## End of the current lecture
+
+## Any question/feedback?

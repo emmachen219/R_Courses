@@ -1,57 +1,375 @@
 ---
-title: "Lecture 3"
-author: "Emma Wei Chen"
-format: revealjs
+title: "PUBH732 Weeks 6-9 <br> R Programming"
+author: "Emma Wei Chen, Ph.D. <br> (wei.chen@ku.ac.ae)"
+date: "`r Sys.Date()`"
+engine: knitr
+format: 
+  revealjs:
+    theme: simple
+    footer: "KU-PUBH732-Spring2025-Emma"
+    slide-number: true
+    auto-stretch: true
+    code-overflow: scroll
+mathjax: true
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
-# Lecture 3 <br> Understanding the Nature of Data (Common Distributions: Normal & t-Distributions)
+# Lecture 3 <br> Understanding the Nature of Data
 
 ## Outline
 
 ### Topics:
 
-Descriptive statistics: Mean, median, variance, standard deviation
-Probability distributions: Normal distribution, t-distribution
-Visualizing distributions using histograms and density plots Central
-Limit Theorem and its implications
+-   Why statistics?
+-   Descriptive statistics
+-   Basic graphs
+    -   Histograms & density plots (for distributions)
+    -   Boxplots (for detecting outliers)
+-   Inferential statistic
+    -   Chi-square test
+    -   More parametric tests in next lecture
 
 ## Outline
-
 ### Class Activities:
 
-Calculating summary statistics for a dataset Plotting histograms and
-density curves for different datasets Comparing real-world examples of
-normal and t-distributions
+-    Calculating  descriptive statistics 
+-    Plotting histograms and density curves
+-    Plotting Boxplots  
+-    Chi-square test
 
-# End of the current lecture
+## Why Statistics?
+-    Role of statistics in research:     
+      -    Statistics removes personal biases and allows us to base conclusions on data rather than intuition.
+      -    Detects Patterns & Relationships – Helps researchers identify trends, correlations, and causal links in data.
+      -    Supports Hypothesis Testing – Enables us to validate or reject research hypotheses using statistical tests.
+      -    Quantifies Uncertainty – Statistics doesn’t just provide answers; it also tells us how confident we can be in our findings.
 
-## Any question/feedback?
-
-# Lecture 4: Representing Data Using Statistical Tools and Standard Graphs
-
-## Outline
-
-### Topics:
-
-Common statistical tools: Correlation, hypothesis testing basics Data
-visualization: Histograms, boxplots, scatter plots Choosing the right
-graph for different data types Best practices for effective data
-representation
-
-## Outline
-
-### Class Activities:
-
-Creating graphs (histograms, boxplots, scatter plots) using R/Python
-Interpreting visualizations and discussing insights Identifying
-misleading graphs and redesigning them for clarity
+## Why Statistics?
+-    Examples of Using Statistics in Public Health Research and Decision-Making:  
+      -    Vaccine Policy & Disease Prevention – Governments decide vaccine schedules based on statistical analysis of disease incidence.  
+      -    Health Program Effectiveness – Evaluating whether public health campaigns (e.g., anti-smoking ads) actually reduce harmful behaviors.  
+      -    Resource Allocation – Hospitals use statistics to predict ICU demand during pandemics.
+      -    Many more...
 
 
-## Notes
-Correlation results
+## Descriptive statistics
+-   Measures of central tendency
+    -    mean: The arithmetic average (sensitive to outliers).
+    -    median: The middle value (robust to outliers).
+    -    mode: The most frequently occurring value.
+
+## Descriptive statistics
+  
+```{r}
+#| echo: true
+library("tidyverse")
+### Function ###
+get_mode <- function(x) {
+  uniq_vals <- unique(x)
+  uniq_vals[which.max(tabulate(match(x, uniq_vals)))]
+}
+
+```
+
+```{r}
+Toy_Data_1 <- read.csv("../ToyData/Toy_Data_1.csv")
+head(Toy_Data_1, n=2)
+Toy_Data_1 <- Toy_Data_1 %>%
+  mutate(
+    BMI = Weight/(Height/100)^2,
+    Age_Childbirth = factor(Age_Childbirth, levels = c("<20", "20-24", "25-29", "30-34", ">34"))
+  ) 
+```
+
+```{r}
+#| echo: true
+
+BMI_summary <- Toy_Data_1 %>%
+  summarise(
+    mean = mean(BMI),
+    median = median(BMI), 
+    mode = get_mode(BMI)
+  )
+print(BMI_summary)
+```
+
+## Descriptive statistics
+-   Measures of dispersion
+    -   range: the difference between the maximum and minimum values
+    -   variance: how much the values in a dataset deviate from the mean
+    -   standard deviation: the square root of variance
+    -   IQR: the spread of the middle 50% of the data
+
+## Descriptive statistics
+
+```{r}
+#| echo: true
+
+BMI_summary <- BMI_summary %>%
+  mutate(
+    max = max(Toy_Data_1$BMI),
+    min = min(Toy_Data_1$BMI),
+    variance = var(Toy_Data_1$BMI), 
+    std = sd(Toy_Data_1$BMI),
+    IQR = IQR(Toy_Data_1$BMI)
+  )
+print(BMI_summary)
+
+```
 
 
+##  Understanding skewness and kurtosis
+-   Skewness describes the asymmetry of a distribution.
+
+```{r}
+# Simulated Data
+set.seed(123)
+symmetric_data <- rnorm(1000, mean = 50, sd = 10)
+right_skewed_data <- rlnorm(1000, meanlog = 3, sdlog = 0.5)
+left_skewed_data <- -rlnorm(1000, meanlog = 3, sdlog = 0.5) + 100
+
+# Combine Data
+df <- data.frame(
+  value = c(symmetric_data, right_skewed_data, left_skewed_data),
+  type = rep(c("Symmetric", "Right Skewed", "Left Skewed"), each = 1000)
+)
+
+# Plot
+ggplot(df, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ type, scales = "free") +
+  theme_minimal() +
+  labs(title = "Examples of Skewness in Distributions")
+
+```
+
+##  Skewness has an impact on measures of central tendency
+
+```{r}
+# Generate Data
+symmetric_data <- rnorm(1000, mean = 50, sd = 10)
+right_skewed_data <- rlnorm(1000, meanlog = 3, sdlog = 0.4) * 10
+left_skewed_data <- -rlnorm(1000, meanlog = 3, sdlog = 0.4) * 10 + 200
+
+# Function to Calculate Mean, Median, and Mode
+get_stats <- function(data) {
+  mean_val <- mean(data)
+  median_val <- median(data)
+  mode_val <- as.numeric(names(sort(table(round(data)), decreasing = TRUE)[1]))
+  return(data.frame(Statistic = c("Mean", "Median", "Mode"),
+                    Value = c(mean_val, median_val, mode_val)))
+}
+
+# Create DataFrame for Plotting
+df <- data.frame(
+  value = c(symmetric_data, right_skewed_data, left_skewed_data),
+  type = rep(c("Symmetric", "Right Skewed", "Left Skewed"), each = 1000)
+)
+
+# Compute Mean, Median, and Mode for Each Distribution
+stats_df <- do.call(rbind, lapply(split(df$value, df$type), get_stats))
+stats_df$type <- rep(c("Left Skewed",  "Right Skewed","Symmetric"), each = 3)
+
+# Plot Histograms
+ggplot(df, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_vline(data = stats_df, aes(xintercept = Value, color = Statistic), linetype = "dashed", size = 1) +
+  facet_wrap(~ type, scales = "free") +
+  theme_minimal() +
+  labs(title = "Mean, Median, and Mode in Different Distributions",
+       x = "Value", y = "Count") +
+  scale_color_manual(values = c("red", "blue", "green"))
+
+
+```
+
+
+##  Understanding skewness and kurtosis
+-   Kurtosis measures whether data has heavy or light tails compared to a normal distribution.
+
+```{r}
+library(e1071) # for kurtosis calculation
+
+# Simulated Data
+normal_data <- rnorm(1000)
+high_kurtosis_data <- c(rnorm(800), rnorm(200, mean = 0, sd = 5))  # More extreme values
+low_kurtosis_data <- runif(1000, -3, 3)  # Uniform distribution
+
+# Combine Data
+df_kurtosis <- data.frame(
+  value = c(normal_data, high_kurtosis_data, low_kurtosis_data),
+  type = rep(c("Normal Kurtosis", "High Kurtosis", "Low Kurtosis"), each = 1000)
+)
+
+# Plot
+ggplot(df_kurtosis, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "coral", color = "black", alpha = 0.7) +
+  facet_wrap(~ type, scales = "free") +
+  theme_minimal() +
+  labs(title = "Examples of Kurtosis in Distributions")
+
+```
+
+## Basic graphs
+-   Histograms
+-   Density plots
+-   Boxplots
+
+## Histograms
+-   The x-axis represents the data values, grouped into bins.
+-   The y-axis represents the count of values in each bin.
+-   Shape of histogram tells us about distribution:
+    -   Symmetric → Normal Distribution
+    -   Right-skewed → More values on the left
+    -   Left-skewed → More values on the right
+
+## Plotting histograms
+
+```{r}
+#| echo: true
+
+ggplot(Toy_Data_1, aes(x = BMI)) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black", alpha = 0.6) + 
+  labs(title = "Histogram of BMI",
+       x = "BMI", y = "Count") +
+  theme_classic()
+
+```
+## Plotting histograms
+
+```{r}
+#| echo: true
+
+ggplot(Toy_Data_1, aes(x = BMI)) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black", alpha = 0.6) + 
+  geom_vline(xintercept = BMI_summary$mean, linetype="dashed", size = 1, color = "red") + 
+  geom_vline(xintercept = BMI_summary$median, linetype="dashed", size = 1, color = "blue") + 
+  labs(title = "Histogram of BMI",
+       x = "BMI", y = "Count") +
+  theme_classic()
+
+```
+
+## Density plots
+
+```{r}
+#| echo: true
+
+ggplot(Toy_Data_1, aes(x = BMI)) +
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "skyblue", color = "black", alpha = 0.6) + 
+  geom_density(color = "darkgrey", linewidth = 1) +
+  geom_vline(xintercept = BMI_summary$mean, linetype="dashed", size = 1, color = "red") + 
+  geom_vline(xintercept = BMI_summary$median, linetype="dashed", size = 1, color = "blue") + 
+  labs(title = "Histogram of BMI",
+       x = "BMI", y = "Count") +
+  theme_classic()
+
+```
+## Density plots
+
+-    Understand the shape of your data (e.g., normal vs. skewed).
+-    Compare distributions (e.g., male vs. female income levels).
+
+## Density plots
+
+```{r}
+#| echo: true
+
+ggplot(Toy_Data_1, aes(x = BMI)) +
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "skyblue", color = "black", alpha = 0.6) + 
+  geom_density(color = "darkgrey", linewidth = 1) +
+  facet_wrap(~ Breast_Cancer, scales = "free") +
+  labs(title = "Histogram of BMI",
+       x = "BMI", y = "Count") +
+  theme_classic()
+
+```
+## Boxplots
+-   A boxplot (or box-and-whisker plot) is a graphical representation of a dataset that displays its distribution, spread, and potential outliers.
+-   Key Components:
+    -    Median (Q2): The middle value of the dataset.
+    -    Interquartile Range (IQR): The range between the 25th percentile (Q1) and 75th percentile (Q3).
+    -    Whiskers: Extend to the smallest and largest values within 1.5 * IQR from Q1 and Q3.
+    -    Outliers: Data points outside the whiskers, plotted individually.
+
+## Plotting Boxplots
+
+```{r, fig.width = 5, fig.height= 5}
+#| echo: true
+
+Toy_Data_1 %>% ggplot(aes(x = Breast_Cancer, y = BMI, fill = Breast_Cancer)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
+  labs(title = "Boxplot of BMI", x = "Breast Cancer", y = "BMI") +
+  theme_classic()
+
+```
+## Plotting Boxplots
+
+```{r, fig.width = 8, fig.height= 5}
+#| echo: true
+
+Toy_Data_1 %>% ggplot(aes(x = as.factor(Age_Childbirth), y = BMI, fill = Breast_Cancer)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
+  labs(title = "Boxplot of BMI", x = "Age at Childbirth", y = "BMI") +
+  theme_classic()
+
+```
+## Chi-square test
+-   The Chi-Square Test is used to determine whether there is a significant association between two categorical variables.
+-   Example:   
+
+| Gender   | Depression Yes | Depression No | Total |
+|----------|--------------:|-------------:|------:|
+| Male     | 30           | 70           | 100  |
+| Female   | 50           | 50           | 100  |
+| **Total** | **80**       | **120**       | **200** |
+
+
+## Chi-square test
+-   How to run Chi-square test
+```{r}
+#| echo: true
+# Create a contingency table
+table_data <- table(Toy_Data_1$Age_Childbirth, Toy_Data_1$Breast_Cancer)
+print(table_data)
+
+# Perform Chi-Square test
+chisq.test(table_data)
+
+```
+## Chi-square test
+
+```{r}
+#| echo: true
+library("janitor")
+Age_Cancer_tbl <- Toy_Data_1 %>% 
+  group_by(Age_Childbirth) %>%
+  count(Breast_Cancer)
+
+Age_Cancer_tbl <- Age_Cancer_tbl %>% spread(Breast_Cancer, n)
+colnames(Age_Cancer_tbl) <- c("Age_Childbirth", "No_Cancer", "Yes_Cancer")
+Age_Cancer_tbl <- Age_Cancer_tbl %>%
+  adorn_percentages(denominator = "row") %>%
+  adorn_pct_formatting() %>%  
+  adorn_ns(position = "front")
+
+print(Age_Cancer_tbl)
+
+```
+
+## More parametric tests in next lecture
+-   t-tests (one-sample, independent, paired)
+-   ANOVA (one-way, two-way, repeated measures)
+-   Pearson’s correlation
+
+## Class Activities:
+
+-    Calculating  mean, median, and sd for Height and Weight in Toy_Data_1  
+-    Comparing histograms and density curves of BMI for groups have different drinking behavior
+-    Plotting Boxplots of BMI to compare across groups that you choose
+-    Using Chi-square test to test if there's association between Breast_Cancer and BRCA mutation
 
 ## End of the current lecture
-
-## Any question/feedback?
+### Any question/feedback?
