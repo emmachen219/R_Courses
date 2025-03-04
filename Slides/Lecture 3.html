@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Emma Wei Chen, Ph.D.&nbsp;  (wei.chen@ku.ac.ae)">
-  <meta name="dcterms.date" content="2025-03-03">
+  <meta name="dcterms.date" content="2025-03-04">
   <title>PUBH732 Weeks 6-9   R Programming</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -402,7 +402,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </div>
 </div>
 
-  <p class="date">2025-03-03</p>
+  <p class="date">2025-03-04</p>
 </section>
 <section>
 <section id="lecture-3-understanding-the-nature-of-data" class="title-slide slide level1 center">
@@ -422,7 +422,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </ul></li>
 <li>Inferential statistic
 <ul>
-<li>Chi-square test</li>
+<li>Chi-squared test</li>
 <li>More parametric tests in next lecture</li>
 </ul></li>
 </ul>
@@ -435,7 +435,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <li>Plotting histograms and density curves</li>
 <li>Plotting Boxplots<br>
 </li>
-<li>Chi-square test</li>
+<li>Chi-squared test</li>
 </ul>
 </section>
 <section id="why-statistics" class="slide level2">
@@ -513,7 +513,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 <ul>
 <li>range: the difference between the maximum and minimum values</li>
 <li>variance: how much the values in a dataset deviate from the mean</li>
-<li>standard deviation: the square root of variance</li>
+<li>standard deviation: the squared root of variance</li>
 <li>IQR: the spread of the middle 50% of the data</li>
 </ul></li>
 </ul>
@@ -666,10 +666,10 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 
 </div>
 <img data-src="Lecture-3_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" class="r-stretch"></section>
-<section id="chi-square-test" class="slide level2">
-<h2>Chi-square test</h2>
+<section id="chi-squared-test" class="slide level2">
+<h2>Chi-squared test</h2>
 <ul>
-<li>The Chi-Square Test is used to determine whether there is a significant association between two categorical variables.</li>
+<li>The Chi-squared Test is used to determine whether there is a significant association between two categorical variables.</li>
 <li>Example:</li>
 </ul>
 <table class="caption-top">
@@ -703,10 +703,10 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
 </tbody>
 </table>
 </section>
-<section id="chi-square-test-1" class="slide level2">
-<h2>Chi-square test</h2>
+<section id="chi-squared-test-1" class="slide level2">
+<h2>Chi-squared test</h2>
 <ul>
-<li>How to run Chi-square test</li>
+<li>How to run Chi-squared test</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="co"># Create a contingency table</span></span>
@@ -721,7 +721,7 @@ Emma Wei Chen, Ph.D.&nbsp;<br> (wei.chen@ku.ac.ae)
   30-34 1092  463
   &gt;34    406  220</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># Perform Chi-Square test</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># Perform Chi-squared test</span></span>
 <span id="cb15-2"><a href=""></a><span class="fu">chisq.test</span>(table_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -732,8 +732,8 @@ X-squared = 130.34, df = 4, p-value &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="chi-square-test-2" class="slide level2">
-<h2>Chi-square test</h2>
+<section id="chi-squared-test-2" class="slide level2">
+<h2>Chi-squared test</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">library</span>(<span class="st">"janitor"</span>)</span>
 <span id="cb17-2"><a href=""></a>Age_Cancer_tbl <span class="ot">&lt;-</span> Toy_Data_1 <span class="sc">%&gt;%</span> </span>
@@ -776,7 +776,7 @@ X-squared = 130.34, df = 4, p-value &lt; 2.2e-16</code></pre>
 </li>
 <li>Comparing histograms and density curves of BMI for groups have different drinking behavior</li>
 <li>Plotting Boxplots of BMI to compare across groups that you choose</li>
-<li>Using Chi-square test to test if there’s association between Breast_Cancer and BRCA mutation</li>
+<li>Using Chi-squared test to test if there’s association between Breast_Cancer and BRCA mutation</li>
 </ul>
 </section>
 <section id="end-of-the-current-lecture" class="slide level2">

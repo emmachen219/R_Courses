@@ -28,7 +28,7 @@ editor:
     -   Histograms & density plots (for distributions)
     -   Boxplots (for detecting outliers)
 -   Inferential statistic
-    -   Chi-square test
+    -   Chi-squared test
     -   More parametric tests in next lecture
 
 ## Outline
@@ -37,7 +37,7 @@ editor:
 -    Calculating  descriptive statistics 
 -    Plotting histograms and density curves
 -    Plotting Boxplots  
--    Chi-square test
+-    Chi-squared test
 
 ## Why Statistics?
 -    Role of statistics in research:     
@@ -99,7 +99,7 @@ print(BMI_summary)
 -   Measures of dispersion
     -   range: the difference between the maximum and minimum values
     -   variance: how much the values in a dataset deviate from the mean
-    -   standard deviation: the square root of variance
+    -   standard deviation: the squared root of variance
     -   IQR: the spread of the middle 50% of the data
 
 ## Descriptive statistics
@@ -316,8 +316,8 @@ Toy_Data_1 %>% ggplot(aes(x = as.factor(Age_Childbirth), y = BMI, fill = Breast_
   theme_classic()
 
 ```
-## Chi-square test
--   The Chi-Square Test is used to determine whether there is a significant association between two categorical variables.
+## Chi-squared test
+-   The Chi-squared Test is used to determine whether there is a significant association between two categorical variables.
 -   Example:   
 
 | Gender   | Depression Yes | Depression No | Total |
@@ -327,19 +327,19 @@ Toy_Data_1 %>% ggplot(aes(x = as.factor(Age_Childbirth), y = BMI, fill = Breast_
 | **Total** | **80**       | **120**       | **200** |
 
 
-## Chi-square test
--   How to run Chi-square test
+## Chi-squared test
+-   How to run Chi-squared test
 ```{r}
 #| echo: true
 # Create a contingency table
 table_data <- table(Toy_Data_1$Age_Childbirth, Toy_Data_1$Breast_Cancer)
 print(table_data)
 
-# Perform Chi-Square test
+# Perform Chi-squared test
 chisq.test(table_data)
 
 ```
-## Chi-square test
+## Chi-squared test
 
 ```{r}
 #| echo: true
@@ -369,7 +369,7 @@ print(Age_Cancer_tbl)
 -    Calculating  mean, median, and sd for Height and Weight in Toy_Data_1  
 -    Comparing histograms and density curves of BMI for groups have different drinking behavior
 -    Plotting Boxplots of BMI to compare across groups that you choose
--    Using Chi-square test to test if there's association between Breast_Cancer and BRCA mutation
+-    Using Chi-squared test to test if there's association between Breast_Cancer and BRCA mutation
 
 ## End of the current lecture
 ### Any question/feedback?
