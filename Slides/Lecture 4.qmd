@@ -354,7 +354,7 @@ g
 cor.test(Toy_Data_4$ht_cm, Toy_Data_4$wt_kg, method = "pearson")
 
 ```
-## Pearson Correlation
+## P  earson Correlation
 
 ```{r}
 #| echo: true
