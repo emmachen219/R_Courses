@@ -31,7 +31,7 @@ Toy_Data_1 <- Macmahon %>%
 
 write.csv(Toy_Data_1, "./ToyData/Toy_Data_1.csv")
 
-##### Toy Data 3: Messy Data
+##### Toy Data 2: Messy Data
 Messy_Data <- data.frame(
   ID = c(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 110),  # Duplicate ID
   Name = c("Alice", "Bob", "Charlie", "David", "Eve", "Frank", "George", "Hannah", NA, "Jack", "Jack"),  # Missing value
@@ -111,6 +111,12 @@ treatment <- ifelse(depression == 1,
                            sample(c(1, 0), n, replace = TRUE, prob = c(0.7, 0.3)), 
                            sample(c(1, 0), n, replace = TRUE, prob = c(0.5, 0.5))),
                     NA)  # NA for non-depressed individuals
+# Sleeping hours, less sleep hours for depressed people who is not treated. 
+sleep_duration <- ifelse(depression == 1,  
+                         ifelse(treatment, 
+                                rnorm(n, mean = 8, sd = 0.5),
+                                rnorm(n, mean = 4, sd = 0.5)),
+                         rnorm(n, mean = 8, sd = 0.5)) 
 
 # Introduce some missing values
 income[sample(1:n, 50)] <- NA  
@@ -119,7 +125,43 @@ treatment[sample(1:n, 20)] <- NA
 
 # Combine into dataframe
 Toy_Data_5 <- data.frame(Gender = gender, Age = age, SES = SES, Income = income, 
-                       Depression = depression, Treatment = treatment)
+                       Depression = depression, Treatment = treatment, Sleep = sleep_duration)
 
 write.csv(Toy_Data_5, "./ToyData/Toy_Data_5.csv")
+
+##### Toy Data 6
+
+# Sample size
+n <- 2000
+
+# Generate categorical variables
+gender <- sample(c("Male", "Female"), n, replace = TRUE)
+smoking_status <- sample(c("Non-Smoker", "Former Smoker", "Current Smoker"), n, replace = TRUE)
+
+# Generate continuous variables
+age <- rnorm(n, mean = 45, sd = 12)  # Age in years
+bmi <- rnorm(n, mean = 27, sd = 4)   # BMI
+bp <- 120 + 0.5 * bmi + rnorm(n, mean = 0, sd = 10)  # Blood pressure (linked to BMI)
+
+# Physical activity (in hours per week) and mental health score (out of 100)
+physical_activity <- abs(rnorm(n, mean = 4, sd = 2))  # Avoid negative values
+mental_health_score <- 80 - 3 * physical_activity + rnorm(n, mean = 0, sd = 5)
+
+# Introduce some outliers in BMI and BP
+bmi[c(10, 50, 90)] <- c(45, 50, 55)  # Extremely high BMI values
+bp[c(10, 50, 90)] <- c(200, 220, 250)  # Extremely high BP values
+
+# Create the dataframe
+Toy_Data_6 <- data.frame(
+  ID = 1:n,
+  Gender = gender,
+  Smoking_Status = smoking_status,
+  Age = age,
+  BMI = bmi,
+  Blood_Pressure = bp,
+  Physical_Activity = physical_activity,
+  Mental_Health_Score = mental_health_score
+)
+
+write.csv(Toy_Data_6, "./ToyData/Toy_Data_6.csv")
 

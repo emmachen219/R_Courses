@@ -11,35 +11,446 @@ format:
     code-overflow: scroll
 ---
 
-# Lecture 4 <br> Understanding the Nature of Data and Basic Statistical Graphs Part 2
-
-
 # Lecture 4: Statistical Tools and Simple Data Visualization
 
 ## Outline
-
 ### Topics:
 
--  Hypothesis testing and p-values
--  χ2-tests
--  Confidence intervals
--  Comparing mean values
--  Correlations
+-   Comparing mean values
+    -   Comparing sample mean with population
+    -   Comparing means values between 2 groups
+    -   Comparing means values between more than 2 groups
+-   Correlations
 
 ## Outline
-
 ### Class Activities:
 
-Creating graphs (histograms, boxplots, scatter plots) using R/Python
-Interpreting visualizations and discussing insights Identifying
-misleading graphs and redesigning them for clarity
+-   Run basic statistical tools in R
+-   Choose a proper plot to visualize the results
+
+## t-distribution
+
+-   A corrected version of the normal distribution for small-sample inference when comparing groups.
+-   The t-distribution accounts for the added uncertainty that comes from estimating the population standard deviation from a small sample.
+-   The t-distribution adjusts for small sample sizes by using degrees of freedom (df) to account for the extra uncertainty.
+
+## t-distribution
+
+-   Becomes normal when sample size increases.
+
+```{r}
+# Load ggplot2 for visualization
+library("ggplot2")
+library("tidyverse")
+
+#### Visualization Settins ####
+base_size = 15
+```
+
+```{r}
+# Define degrees of freedom to compare
+df_values <- c(1, 5, 10, 30, 50)  # t-distribution with increasing df
+
+# Create a sequence of x-values (t-values)
+x_vals <- seq(-4, 4, length.out = 300)
+
+# Compute density for t-distributions and standard normal
+df_plot <- data.frame(
+  x = rep(x_vals, times = length(df_values) + 1),
+  density = c(unlist(lapply(df_values, function(df) dt(x_vals, df))),
+              dnorm(x_vals)),  # Normal distribution density
+  distribution = factor(
+    rep(c(paste0("t (df=", df_values, ")"), "Normal"), each = length(x_vals)),
+    levels = c(paste0("t (df=", df_values, ")"), "Normal")  # Order legend correctly
+  )
+)
+
+# Plot the t-distributions and normal distribution
+ggplot(df_plot, aes(x = x, y = density, color = distribution)) +
+  geom_line(size = 1, alpha = 0.5) +
+  labs(title = "T-Distribution Approaching Normal Distribution",
+       x = "Value",
+       y = "Density",
+       color = "Distribution") +
+  theme_minimal(base_size = base_size)
+
+```
+
+## One-sample t-test
+
+-   To compare a sample mean to a known population mean.
+-   Using Example Toy_Data_4, a simulated dataset of Ebola epidemic:
+    -   Is the temperature of the patients different from normal body temperature 37.0?
+
+## One-sample t-test
+
+```{r}
+#| echo: true
+Toy_Data_4 <- read.csv("../ToyData/Toy_Data_4.csv")
+Toy_Data_4 <- Toy_Data_4 %>% dplyr::select(case_id, outcome, gender, age, age_unit, wt_kg, ht_cm, ct_blood, temp, fever, cough, vomit)
+#summary(Toy_Data_4)
+test <- t.test(Toy_Data_4$temp, mu = 37.0)
+test
+```
+
+## One-sample t-test
+
+```{r}
+#| echo: true
+ggplot(Toy_Data_4, aes(x = temp)) +
+  geom_histogram(fill = "steelblue", color = "black", alpha = 0.7) + 
+  theme_classic(base_size = base_size)
+
+```
+
+## Two independent sample t-test
+
+-   To compare means between two independent groups.
+-   Using Example Toy_Data_4:
+
+    -   Is there difference between the groups who recovered and who died on blood cell count?
+
+## Two independent sample t-test
+
+```{r}
+#| echo: true
+
+Toy_Data_4 <- Toy_Data_4 %>%
+      mutate(
+        outcome = as.factor(outcome)
+      )%>%
+      filter(!is.na(outcome) & !is.na(ct_blood))
+  t.test(ct_blood ~ outcome, data = Toy_Data_4)
+```
+
+## Boxplots
+
+```{r}
+#| echo: true
+boxplot <- Toy_Data_4 %>% ggplot(aes(x = outcome, y = ct_blood, fill = outcome)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red", outlier.shape = 16, width = 0.4) +
+  labs(title = "WBC count difference between two outcome group", x = "Outcome", y = "WBC count") +
+  theme_classic(base_size = base_size)
+
+boxplot
+```
+
+## Bar plots
+
+-   Another common way to visualize group mean comparison is to use bar plot with CIs.
+
+```{r}
+#| echo: true
+summary_tbl <- Toy_Data_4 %>%
+  group_by(outcome) %>%
+  summarise(
+    n =  n(),
+    mean = mean(ct_blood), 
+    sd = sd(ct_blood)
+  ) %>%
+  mutate(
+    ci_lower = mean - 1.96 * sd/sqrt(n),
+    ci_upper = mean + 1.96 * sd/sqrt(n)
+  ) %>%
+  ungroup()
+```
+
+## Bar plots
+
+```{r}
+#| echo: true
+g <- summary_tbl %>% ggplot(aes(x = outcome, y = mean, fill = outcome)) +
+  geom_col(position = "dodge" , width = 0.4) +  
+  geom_errorbar(position = "dodge", aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) + 
+  coord_cartesian(ylim = c(20, 23)) +
+  theme_classic(base_size = base_size)
+g
+
+```
+
+## Two paired sample t-test
+
+-   To compare two paired sample t-test
+
+    -   pre- and post-intervention measurements on the same group of individuals
+    -   to compare two measurements taken from the same individuals under different conditions (treatment A vs treatment B).
 
 
-## Notes
-Correlation results
+
+## Two paired sample t-test
+-   Example Data: you have data from an epidemiological study examining the effect of an exercise intervention on systolic blood pressure. 
+```{r}
+#| echo: true
+
+# Generate sample data
+bp_data <- data.frame(
+      ID = rep(1:30, times = 2),  # 30 individuals, each appearing twice
+      Time = rep(c("Pre", "Post"), each = 30),  # Pre- and Post-intervention labels
+      BP = round(c(rnorm(30, mean = 150, sd = 10),  # Pre-intervention BP
+                   rnorm(30, mean = 130, sd = 10))) # Post-intervention BP
+    )
+```
+
+## Two paired sample t-test
+
+-   To compare two paired sample t-test
+```{r}
+#| echo: true
+# Convert to wide format for t-test
+bp_wide <- bp_data %>% 
+    pivot_wider(names_from = Time, values_from = BP)
+# Perform a paired t-test to compare pre-intervention and post-intervention BP
+t_test_result <- t.test(bp_wide$Pre, bp_wide$Post, paired = TRUE)
+# Display the result of the t-test
+print(t_test_result)
+```
+
+## Paired line plot (Spaghetti plot)
+
+```{r}
+#| echo: true
+
+g <- ggplot(bp_data, aes(x = Time, y = BP, group = ID)) +
+  geom_line(aes(color = factor(ID)), alpha = 0.7, show.legend = FALSE) +
+  geom_point(color = "darkgrey", size = 3, alpha = 0.5) +
+  theme_classic(base_size = base_size) +
+  labs(title = "Paired Data Comparison", y = "Blood Pressure", x = "Time")
+  
+g
+  
+```
+
+## Boxplots
+
+```{r}
+#| echo: true
+
+g <- ggplot(bp_data, aes(x = Time, y = BP)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.5, width = 0.4) +
+  geom_jitter(aes(color = factor(ID)), width = 0.1, size = 2, alpha = 0.7) +
+  geom_line(aes(group = ID), color = "gray", alpha = 0.5) +
+  labs(title = "Paired Boxplot with Individual Changes", y = "Blood Pressure", x = "Time") +
+  theme_classic(base_size = base_size) +
+  theme(legend.position = "none") 
+g
+```
+
+## Comparing means between more than two groups
+
+-   Use **ANOVA** when comparing more than two groups.
+
+## Comparing means between more than two groups
+-   Example Toy_Data_4: how does height differ between age groups
+```{r}
+#| echo: true
+ Toy_Data_4 <- Toy_Data_4 %>%
+  filter(!is.na(age)) %>%
+  mutate(
+    age_ys = case_when(
+      age_unit == "years" ~ age,
+      age_unit == "months" ~ age/24
+      )
+  )%>%
+ mutate(
+    age_group = cut(age_ys, breaks = c(0, 6, 18, 100), labels = c("0-5", "6-17", "18+"), right = FALSE),
+    gender = as.factor(gender)
+ )
+```
+
+## Comparing means between more than two groups
+```{r}
+#| echo: true
+aov_test <- aov(ht_cm ~ age_group, data = Toy_Data_4)
+summary(aov_test)
+```
+
+## Comparing means between more than two groups
+
+```{r}
+#| echo: true
+summary_tbl <- Toy_Data_4 %>%
+  group_by(age_group) %>%
+  summarise(
+    n =  n(),
+    mean = mean(ht_cm), 
+    sd = sd(ht_cm)
+  ) %>%
+  mutate(
+    ci_lower = mean - 1.96 * sd/sqrt(n),
+    ci_upper = mean + 1.96 * sd/sqrt(n)
+  ) %>%
+  ungroup()
+```
+
+## Comparing means between more than two groups
+
+```{r}
+#| echo: true
+g <- summary_tbl %>% ggplot(aes(x = age_group, y = mean, fill = age_group)) +
+  geom_col(position = "dodge" , width = 0.6, alpha = 0.7) +  
+  geom_errorbar(position = "dodge", aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) + 
+  labs(title = "Height Difference between Age Groups", x = "Age Group (years)", y = "Height (cm)", fill = "Age Group (years)")  + 
+  theme_classic(base_size = base_size)
+g
+
+```
+
+## Comparing means between more than two groups: Two factors
+
+-   Multivariable ANOVA when comparing groups from **two or more factors**.
 
 
+## Comparing means between more than two groups: Two factors
+-   Example Toy_Data_4: how does height differ between age and gender groups
+
+```{r}
+#| echo: true
+aov_test <- aov(ht_cm ~ age_group * gender, data = Toy_Data_4)
+summary(aov_test)
+```
+
+## Comparing means between more than two groups: Two factors
+
+```{r}
+#| echo: true
+summary_tbl <- Toy_Data_4 %>%
+  filter(!is.na(gender)) %>%
+  group_by(gender, age_group) %>%
+  summarise(
+    n =  n(),
+    mean = mean(ht_cm), 
+    sd = sd(ht_cm)
+  ) %>%
+  mutate(
+    ci_lower = mean - 1.96 * sd/sqrt(n),
+    ci_upper = mean + 1.96 * sd/sqrt(n)
+  ) %>%
+  ungroup()
+```
+
+## Comparing means between more than two groups: Two factors
+
+```{r}
+#| echo: true
+g <- summary_tbl %>% ggplot(aes(x = age_group, y = mean, fill = gender)) +
+  geom_col(position = position_dodge(width = 0.6), width = 0.6, alpha = 0.7) +  
+  geom_errorbar(position = position_dodge(width = 0.6), aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) + 
+  labs(title = "Height Difference between Age Groups", x = "Age Group (years)", y = "Height (cm)")  + 
+  coord_cartesian(ylim = c(20, 170)) +
+  theme_classic(base_size = base_size)
+g
+
+```
+
+## Correlations
+
+-   Correlation measures the relationship between two variables.
+
+## Pearson Correlation
+-   Pearson correlation is commonly used when both variables are normally distributed.
+
+```{r}
+#| echo: true
+cor.test(Toy_Data_4$ht_cm, Toy_Data_4$wt_kg, method = "pearson")
+
+```
+## Pearson Correlation
+
+```{r}
+#| echo: true
+
+# Plot
+g <- ggplot(Toy_Data_4, aes(x = ht_cm, y = wt_kg)) +
+  geom_point(color = "darkgrey", size = 3, alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.2) +
+  labs(title = "Correlation between Height and Weight", y = "Weight (kg)", x = "Height (cm)") +
+  theme_classic(base_size = base_size)
+g
+
+```
+
+## Spearman Correlation
+-   Spearman correlation is commonly used with **ordinal variables**.
+
+```{r}
+#| echo: true
+Toy_Data_3 <- read.csv("../ToyData/Toy_Data_3.csv")
+#| echo: true
+cor.test(Toy_Data_3$Income, Toy_Data_3$Depression_Score, method = "spearman")
+
+```
+
+## Spearman Correlation
+
+```{r}
+#| echo: true
+
+# Plot
+g <- ggplot(Toy_Data_3, aes(x = Income, y = Depression_Score)) +
+  geom_point(color = "darkgrey", size = 3, alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.2) +
+  labs(title = "Correlation between Depression and Household Income", y = "Drepssion", x = "Household Income (AED)") +
+  theme_classic(base_size = base_size)
+g
+
+```
+
+
+## The impact of outliers on correlations
+
+```{r}
+# Generate random data with no real correlation
+x <- rnorm(20, mean = 50, sd = 10)
+y <- rnorm(20, mean = 50, sd = 10)
+
+# Introduce outliers that create an artificial correlation
+x_outliers <- c(100, 105)
+y_outliers <- c(100, 110)
+
+# Combine data
+x_all <- c(x, x_outliers)
+y_all <- c(y, y_outliers)
+
+# Create a data frame
+df <- data.frame(x = x_all, y = y_all)
+
+# Compute correlation
+cor_with_outliers <- cor(df$x, df$y)
+
+# Plot with outliers
+p1 <- ggplot(df, aes(x = x, y = y)) +
+  geom_point(color = "blue", size = 3, alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "pink", alpha = 0.5) +
+  ggtitle(paste("With Outliers: Correlation =", round(cor_with_outliers, 2)))
+
+# Remove outliers (keeping only data within 2 SD from mean)
+df_clean <- df[abs(df$x - mean(df$x)) < 2 * sd(df$x) & abs(df$y - mean(df$y)) < 2 * sd(df$y), ]
+
+# Compute correlation without outliers
+cor_without_outliers <- cor(df_clean$x, df_clean$y)
+
+# Plot without outliers
+p2 <- ggplot(df_clean, aes(x = x, y = y)) +
+  geom_point(color = "blue", size = 3, alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "pink", alpha = 0.5) +
+  ggtitle(paste("Without Outliers: Correlation =", round(cor_without_outliers, 2)))
+
+# Print both plots
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+```
 
 ## End of the current lecture
+### Any question/feedback?
 
-## Any question/feedback?
+## Class Activities
+
+-   Run basic statistical tools in R using Toy_Data_6.csv
+    -      Comparing BMI between Gender groups
+    -      Comparing Blood Pressure across 3 groups with different smoking status
+    -      Explore the effect of Gender and Smoking Status on Blood Pressure 
+    -      Correlation between Physical Activity and Mental Health Score
+    -      Group BMI into Underweight(<20), Health(20-25), Overweight(25-30) and Obeses(>30), then correlate BMI with Pysical Activity
+-   Choose proper plots to visualize at least 2 of the above results
+
+
