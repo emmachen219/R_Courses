@@ -80,17 +80,19 @@ write.csv(Toy_Data_4, "./ToyData/Toy_Data_4.csv")
 
 ##### Toy Data 5
 # Sample size
-n <- 2000
+n <- 3500
 
 # Generate gender variable (Binary: Male/Female)
-gender <- sample(c("Male", "Female"), n, replace = TRUE, prob = c(0.4, 0.6))  
+gender_1 <- sample(c("Male", "Female"), n-500, replace = TRUE, prob = c(0.4, 0.6))  
+gender_2 <- sample(c("m", "f"), 500, replace = TRUE, prob = c(0.4, 0.6))  
+gender <- c(gender_1, gender_2)
 
 # Age distribution (normal with some variation)
 age <- round(rnorm(n, mean = 35, sd = 10))  
 age[age < 18] <- 18  # Ensuring minimum age is 18
 
 # Socioeconomic status (SES): Low, Medium, High (with gender bias)
-SES <- ifelse(gender == "Male",  
+SES <- ifelse(gender %in% c("m", "Male"),  
               sample(c("Low", "Medium", "High"), n, replace = TRUE, prob = c(0.2, 0.5, 0.3)),
               sample(c("Low", "Medium", "High"), n, replace = TRUE, prob = c(0.4, 0.5, 0.1)))  
 
@@ -98,16 +100,16 @@ SES <- ifelse(gender == "Male",
 income <- ifelse(SES == "Low", rnorm(n, mean = 2000, sd = 500),
                  ifelse(SES == "Medium", rnorm(n, mean = 4000, sd = 1000), 
                         rnorm(n, mean = 7000, sd = 1500)))
-income <- ifelse(gender == "Female", income * 0.85, income)  # Gender pay gap  
+income <- ifelse(gender %in% c("f", "Female"), income * 0.85, income)  # Gender pay gap  
 
 # Depression status (1 = Depressed, 0 = Not Depressed)
-depression <- ifelse(gender == "Female", 
+depression <- ifelse(gender %in% c("f", "Female"), 
                      sample(c(1, 0), n, replace = TRUE, prob = c(0.5, 0.5)), 
                      sample(c(1, 0), n, replace = TRUE, prob = c(0.3, 0.7)))  
 
 # Treatment received (1 = Yes, 0 = No, biased by gender & SES)
 treatment <- ifelse(depression == 1,
-                    ifelse(gender == "Male",
+                    ifelse(gender %in% c("m", "Male"),
                            sample(c(1, 0), n, replace = TRUE, prob = c(0.7, 0.3)), 
                            sample(c(1, 0), n, replace = TRUE, prob = c(0.5, 0.5))),
                     NA)  # NA for non-depressed individuals
@@ -132,11 +134,17 @@ write.csv(Toy_Data_5, "./ToyData/Toy_Data_5.csv")
 ##### Toy Data 6
 
 # Sample size
-n <- 2000
+n <- 200
 
 # Generate categorical variables
 gender <- sample(c("Male", "Female"), n, replace = TRUE)
 smoking_status <- sample(c("Non-Smoker", "Former Smoker", "Current Smoker"), n, replace = TRUE)
+
+# Now, create more male smokers by filtering the data
+smoking_status[gender == "Male"] <- sample(c("Non-Smoker", "Former Smoker", "Current Smoker"),
+                                           sum(gender == "Male"),
+                                           replace = TRUE,
+                                           prob = c(0.3, 0.2, 0.5))  # More smokers among males
 
 # Generate continuous variables
 age <- rnorm(n, mean = 45, sd = 12)  # Age in years
@@ -148,8 +156,8 @@ physical_activity <- abs(rnorm(n, mean = 4, sd = 2))  # Avoid negative values
 mental_health_score <- 80 - 3 * physical_activity + rnorm(n, mean = 0, sd = 5)
 
 # Introduce some outliers in BMI and BP
-bmi[c(10, 50, 90)] <- c(45, 50, 55)  # Extremely high BMI values
-bp[c(10, 50, 90)] <- c(200, 220, 250)  # Extremely high BP values
+bmi[c(190, 195)] <- c(55, 60)  # Extremely high BMI values
+bp[c(190, 195)] <- c(300, 500)  # Extremely high BP values
 
 # Create the dataframe
 Toy_Data_6 <- data.frame(
