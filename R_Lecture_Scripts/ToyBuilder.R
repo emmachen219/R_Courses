@@ -173,3 +173,49 @@ Toy_Data_6 <- data.frame(
 
 write.csv(Toy_Data_6, "./ToyData/Toy_Data_6.csv")
 
+##### Toy Date 7
+
+# Number of observations
+n <- 2200
+
+# Baby sex with messiness
+Baby_Sex <- sample(c("f", "m", "F", "M", "female", "male"), size = n, replace = TRUE, prob = c(0.2, 0.2, 0.15, 0.15, 0.15, 0.15))
+
+# Maternal income level
+Income_Level <- sample(c("low", "medium", "high"), size = n, replace = TRUE, prob = c(0.4, 0.4, 0.2))
+
+# Depression during pregnancy
+Depression <- rbinom(n, size = 1, prob = ifelse(Income_Level == "low", 0.5, 0.2))
+
+# Maternal height and weight
+Height <- runif(n, min = 130, max = 175)
+Weight <- runif(n, min = 38, max = 150)
+
+# Baby birthweight baseline (in grams)
+Birthweight <- 3000 +
+  ifelse(grepl("m|M|male", Baby_Sex), 200, -100) +                    # Boys heavier
+  ifelse(Income_Level == "low", -300, 0) +                      # Low income → lower birthweight
+  ifelse(Depression == 1, -250, 0) +                            # Depression → lower birthweight
+  rnorm(n, mean = 0, sd = 200)                                  # Random noise
+
+# Clamp to realistic range
+Birthweight <- pmin(pmax(Birthweight, 800), 4500)
+
+# Introduce missing values (~10%)
+Depression[sample(1:n, size = round(0.1 * n))] <- NA
+# Introduce missing birthweight (~5%)
+Birthweight[sample(1:n, size = round(0.05 * n))] <- NA
+
+# Build the data frame
+df_practice <- data.frame(
+  ID = 1:n,
+  Birthweight = round(Birthweight),
+  Baby_Sex = Baby_Sex,
+  Income_Level = Income_Level,
+  Depression = Depression,
+  Height = round(Height, 1),
+  Weight = round(Weight, 1),
+  X = 1:n
+)
+
+write.csv(df_practice, "./ToyData/Toy_Data_7.csv")
